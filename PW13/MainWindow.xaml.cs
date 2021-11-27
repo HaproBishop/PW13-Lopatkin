@@ -201,6 +201,11 @@ namespace PW13
             DataGT.ItemsSource = VisualArray.DeleteRow(Convert.ToInt32(DataGT.SelectedIndex)).DefaultView;            
         }
 
+        private void DataGT_LostFocus(object sender, RoutedEventArgs e)
+        {
+            WorkMas.dmas = VisualArray.SyncData();
+        }
+
         private void DataGT_SourceUpdated(object sender, DataTransferEventArgs e)
         {
             WorkMas.dmas = VisualArray.SyncData();
