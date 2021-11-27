@@ -11,7 +11,11 @@ namespace VisualTable
     //для визуализации данных 
     public static class VisualArray
     {
-        public static DataTable res;        
+        public static DataTable res;
+        private static Stack<DataTable> reservedtable = new Stack<DataTable>();
+        private static Stack<DataTable> cancelledchanges = new Stack<DataTable>();
+        public static Stack<DataTable> ReservedTable { get => reservedtable; }
+        public static Stack<DataTable> CancelledChanges { get => cancelledchanges; }
         public static DataTable AddNewRow()
         {
             DataRow row;
@@ -65,7 +69,7 @@ namespace VisualTable
                 }
                 res.Rows.Add(row);
             }
-
+            ReserveTable();
             return res;
         }
         public static int[,] SyncData()
@@ -128,6 +132,29 @@ namespace VisualTable
                 }
             }
             return newdmas;
+        }
+        public static void ReserveTable()
+        {
+            reservedtable.Push(res);
+            cancelledchanges.Clear();
+        }
+        public static DataTable CancelChanges()
+        {
+            if (reservedtable.Count != 0)
+            {
+                cancelledchanges.Push(reservedtable.Peek());
+                res = reservedtable.Pop();
+            }
+            return res;
+        }
+        public static DataTable CancelReturn()
+        {
+            if (cancelledchanges.Count != 0)
+            {
+                reservedtable.Push(cancelledchanges.Peek());
+                res = cancelledchanges.Pop();
+            }
+            return res;
         }
     }
 }
