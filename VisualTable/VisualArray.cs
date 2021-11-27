@@ -12,10 +12,11 @@ namespace VisualTable
     public static class VisualArray
     {
         public static DataTable res;
-        private static Stack<DataTable> reservedtable = new Stack<DataTable>();
-        private static Stack<DataTable> cancelledchanges = new Stack<DataTable>();
-        public static Stack<DataTable> ReservedTable { get => reservedtable; }
-        public static Stack<DataTable> CancelledChanges { get => cancelledchanges; }
+        private static Stack<int[,]> reservedtable = new Stack<int[,]>();
+        private static Stack<int[,]> cancelledchanges = new Stack<int[,]>();
+        public static bool _firstundo;
+        public static Stack<int[,]> ReservedTable { get => reservedtable; }
+        public static Stack<int[,]> CancelledChanges { get => cancelledchanges; }
         public static DataTable AddNewRow()
         {
             DataRow row;
@@ -27,7 +28,7 @@ namespace VisualTable
             res.Rows.Add(row);
             return res;
         }
-        public static DataTable AddNewRow<T>(T[] mas)
+        public static DataTable AddNewRow(int[] mas)
         {
             res.Rows.Add(mas);
             return res;
@@ -52,12 +53,12 @@ namespace VisualTable
             return res;
         }
         //Метод для двухмерного массива
-        public static DataTable ToDataTable<T>(T[,] matrix)
+        public static DataTable ToDataTable(int[,] matrix)
         {            
             res = new DataTable();
              for (int i = 0; i < matrix.GetLength(1); i++)
             {
-                res.Columns.Add("Column" + (i+1), typeof(T));
+                res.Columns.Add("Column" + (i+1), typeof(string));
             }
 
             for (int i = 0; i < matrix.GetLength(0); i++)
@@ -68,8 +69,7 @@ namespace VisualTable
                     row[j] = matrix[i, j];
                 }
                 res.Rows.Add(row);
-            }
-            ReserveTable();
+            }            
             return res;
         }
         public static int[,] SyncData()
@@ -84,6 +84,7 @@ namespace VisualTable
                     if (!prove) dmas[i, j] = 0;
                 }
             }
+            ReserveTable(dmas);
             return dmas;
         }
         public static int[,] AddNewColumnIntoMas(int [,] dmas)
@@ -133,26 +134,26 @@ namespace VisualTable
             }
             return newdmas;
         }
-        public static void ReserveTable()
+        public static void ReserveTable(int[,] dmas)
         {
-            reservedtable.Push(res);
+            reservedtable.Push(dmas);
             cancelledchanges.Clear();
         }
         public static DataTable CancelChanges()
         {
-            if (reservedtable.Count != 0)
+            if (reservedtable.Count > 1)
             {
-                cancelledchanges.Push(reservedtable.Peek());
-                res = reservedtable.Pop();
+                cancelledchanges.Push(reservedtable.Peek());                
+                return ToDataTable(reservedtable.Pop());
             }
             return res;
         }
-        public static DataTable CancelReturn()
+        public static DataTable CancelUndo()
         {
-            if (cancelledchanges.Count != 0)
+            if (cancelledchanges.Count > 1)
             {
-                reservedtable.Push(cancelledchanges.Peek());
-                res = cancelledchanges.Pop();
+                reservedtable.Push(cancelledchanges.Peek());                
+                return ToDataTable(cancelledchanges.Pop());                           
             }
             return res;
         }
