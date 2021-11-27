@@ -14,7 +14,7 @@ namespace VisualTable
         public static DataTable res;
         private static Stack<int[,]> reservedtable = new Stack<int[,]>();
         private static Stack<int[,]> cancelledchanges = new Stack<int[,]>();
-        public static bool _firstundo;
+        public static bool _firstundo = true;
         public static Stack<int[,]> ReservedTable { get => reservedtable; }
         public static Stack<int[,]> CancelledChanges { get => cancelledchanges; }
         public static DataTable AddNewRow()
@@ -69,7 +69,12 @@ namespace VisualTable
                     row[j] = matrix[i, j];
                 }
                 res.Rows.Add(row);
-            }            
+            }
+            if (_firstundo)
+            {
+                _firstundo = false;
+                ReserveTable(matrix);
+            }
             return res;
         }
         public static int[,] SyncData()
