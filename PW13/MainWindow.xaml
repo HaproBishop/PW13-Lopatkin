@@ -123,6 +123,6 @@
                 <Button x:Name="Exit" Content="Выход" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" Width="214" Click="Exit_Click" IsCancel="True" Height="20"/>
             </Grid>
         </GroupBox>
-        <DataGrid x:Name="DataGT" Margin="412,10,10,10" CellEditEnding="DataGT_CellEditEnding" Grid.Row="2" PreviewTextInput="DataGT_PreviewTextInput" SourceUpdated="DataGT_SourceUpdated" LostFocus="DataGT_LostFocus"/>
+        <DataGrid x:Name="VisualTable" Margin="412,10,10,10" CellEditEnding="VisualTable_CellEditEnding" Grid.Row="2" PreviewTextInput="VisualTable_PreviewTextInput" SourceUpdated="VisualTable_SourceUpdated"/>
     </Grid>
 </Window>

@@ -31,10 +31,7 @@ namespace PW13
         {
             InitializeComponent();
         }        
-        int iColumn, iRow;
-        string reservedvalue;
-        int indexreserving;
-        bool canundo;
+        
         private void Open_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openfile = new OpenFileDialog
@@ -48,7 +45,7 @@ namespace PW13
             if (openfile.ShowDialog() == true) 
             {                                
                 WorkMas.Open_File(openfile.FileName); //Обращение к функции с параметром (название текстового файла, в котором хранятся данные)
-                DataGT.ItemsSource = VisualArray.ToDataTable(WorkMas.dmas).DefaultView; //Отображение данных, считанных с файла
+                VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas.dmas).DefaultView; //Отображение данных, считанных с файла
                 Result.Clear();
                 Find.IsEnabled = true;
                 Find_Menu.IsEnabled = true;
@@ -74,7 +71,7 @@ namespace PW13
 
         private void ClearTable_Click(object sender, RoutedEventArgs e)
         {
-            DataGT.ItemsSource = WorkMas.ClearTable(); //Обращение к функции "очистки" массива и возвращение null для DataGrid(Очистка таблицы)
+            VisualTable.ItemsSource = WorkMas.ClearTable(); //Обращение к функции "очистки" массива и возвращение null для DataGrid(Очистка таблицы)
             Result.Clear();
             Find.IsEnabled = false;
             Find_Menu.IsEnabled = false;
@@ -88,7 +85,7 @@ namespace PW13
             if (prv_columns == true && prv_rows == true)
             {
                 WorkMas.CreateMas(in rows, in columns);
-                DataGT.ItemsSource = VisualArray.ToDataTable(WorkMas.dmas).DefaultView;
+                VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas.dmas).DefaultView;
                 Find.IsEnabled = true;
                 Find_Menu.IsEnabled = true;
             }           
@@ -110,7 +107,7 @@ namespace PW13
             if (prv_range == true && WorkMas.dmas != null) //2-ое условие - проверка на заполнение без скелета
             {                
                 WorkMas.FillDMas(in range);//Обращение с передачей информации об диапазоне
-                DataGT.ItemsSource = VisualArray.ToDataTable(WorkMas.dmas).DefaultView; //Отображение таблицы с заполненными значениями
+                VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas.dmas).DefaultView; //Отображение таблицы с заполненными значениями
             }
             else MessageBox.Show("У вас нет скелета таблицы или введен некорректно диапазон значений", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Error);
         }
@@ -120,24 +117,15 @@ namespace PW13
             MessageBox.Show("1) В программе нельзя вводить более трехзначных чисел для диапазона и двухзначных для столбцов и строк.\n2)Заполнение происходит от 0 до указанного вами значенияю\n3)Для включения кнопки \"Выполнить\" необходимо создать таблицу.", "Справка", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void DataGT_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        private void VisualTable_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {                                 
-            string cell = DataGT.SelectedItem.ToString();
-            indexreserving = DataGT.SelectedIndex;
-            reservedvalue = cell;
-            iColumn = e.Column.DisplayIndex;
-            iRow = e.Row.GetIndex();            
-            if (iRow < WorkMas.dmas.GetLength(0))
-            {
-                canundo = true;
-                reservedvalue = WorkMas.dmas[iRow, iColumn].ToString();
-            }
+            object cell = VisualTable.SelectedItem;          
             bool tryedit = int.TryParse(((TextBox)e.EditingElement).Text, out int value);
             if (tryedit)
             {
                 WorkMas.dmas = VisualArray.SyncData();                                
             }
-            if (e.EditAction == DataGridEditAction.Cancel) DataGT.SelectedItem = cell;
+            if (e.EditAction == DataGridEditAction.Cancel) VisualTable.SelectedItem = cell;
         }
 
         private void Find_Click(object sender, RoutedEventArgs e)
@@ -164,41 +152,36 @@ namespace PW13
             if (e.KeyboardDevice.Modifiers == ModifierKeys.Alt && e.Key == Key.F4) Exit_Click(sender, e);
             if (e.Key == Key.F1) Support_Click(sender, e);
             if (e.Key == Key.F12) AboutProgram_Click(sender, e);
-            if(e.Key == Key.Delete && DataGT.SelectedIndex != -1) WorkMas.dmas = VisualArray.SyncData();
+            if(e.Key == Key.Delete && VisualTable.SelectedIndex != -1) WorkMas.dmas = VisualArray.SyncData();
             if (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.Z) 
-            {                
-                DataGT.ItemsSource = VisualArray.CancelChanges().DefaultView;                
+            {
+                VisualTable.ItemsSource = VisualArray.CancelChanges().DefaultView;                
             }
         }
 
-        private void DataGT_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        private void VisualTable_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {            
             e.Handled = "-1234567890".IndexOf(e.Text) < 0;
         }
         private void AddColumn_Click(object sender, RoutedEventArgs e)
-        {                      
-            DataGT.ItemsSource = VisualArray.AddNewColumn(WorkMas.dmas).DefaultView;            
+        {
+            VisualTable.ItemsSource = VisualArray.AddNewColumn(WorkMas.dmas).DefaultView;            
         }
         private void AddRow_Click(object sender, RoutedEventArgs e)
-        {                     
-            DataGT.ItemsSource = VisualArray.AddNewRow().DefaultView;            
+        {
+            VisualTable.ItemsSource = VisualArray.AddNewRow().DefaultView;            
         }
         private void DeleteColumn_Click(object sender, RoutedEventArgs e)
-        {                    
-            DataGT.ItemsSource = VisualArray.DeleteColumn(WorkMas.dmas, Convert.ToInt32(DataGT.CurrentCell.Column.DisplayIndex)).DefaultView;            
+        {
+            VisualTable.ItemsSource = VisualArray.DeleteColumn(WorkMas.dmas, Convert.ToInt32(VisualTable.CurrentCell.Column.DisplayIndex)).DefaultView;            
         }
 
         private void DeleteRow_Click(object sender, RoutedEventArgs e)
-        {                      
-            DataGT.ItemsSource = VisualArray.DeleteRow(Convert.ToInt32(DataGT.SelectedIndex)).DefaultView;            
+        {
+            VisualTable.ItemsSource = VisualArray.DeleteRow(Convert.ToInt32(VisualTable.SelectedIndex)).DefaultView;            
         }
 
-        private void DataGT_LostFocus(object sender, RoutedEventArgs e)
-        {            
-            
-        }
-
-        private void DataGT_SourceUpdated(object sender, DataTransferEventArgs e)
+        private void VisualTable_SourceUpdated(object sender, DataTransferEventArgs e)
         {            
             WorkMas.dmas = VisualArray.SyncData();
         }
