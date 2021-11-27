@@ -11,8 +11,7 @@ namespace VisualTable
     //для визуализации данных 
     public static class VisualArray
     {
-        public static DataTable res;
-        public static int j = 0;
+        public static DataTable res;        
         public static DataTable AddNewRow()
         {
             DataRow row;
@@ -38,26 +37,23 @@ namespace VisualTable
         public static DataTable AddNewColumn(int [,] dmas)
         {            
             dmas = SyncData();
-            dmas = AddNewColumnIntoMas(dmas);
-            res.Columns.Add("Column " + ++j);            
+            dmas = AddNewColumnIntoMas(dmas);                       
             res = ToDataTable(dmas);
             return res;
         }
-        public static DataTable DeleteColumn(int index, int[,] dmas)
-        {
-            j--;
-            dmas = SyncData();
-            res.Columns.RemoveAt(index);             
+        public static DataTable DeleteColumn(int[,] dmas, int index)
+        {            
+            dmas = DeleteColumnIntoMas(dmas, index);
+            res = ToDataTable(dmas);
             return res;
         }
         //Метод для двухмерного массива
         public static DataTable ToDataTable<T>(T[,] matrix)
-        {
-            j = 0;
+        {            
             res = new DataTable();
              for (int i = 0; i < matrix.GetLength(1); i++)
             {
-                res.Columns.Add("Column" + ++j, typeof(T));
+                res.Columns.Add("Column" + (i+1), typeof(T));
             }
 
             for (int i = 0; i < matrix.GetLength(0); i++)
@@ -112,8 +108,26 @@ namespace VisualTable
         }
         public static void DataTableClear()
         {
-            res.Clear();
-            j = 0;
+            res.Clear();            
+        }
+        public static int[,] DeleteColumnIntoMas(int[,] dmas, int index)
+        {
+            int[,] newdmas = new int[dmas.GetLength(0), dmas.GetLength(1) - 1];           
+            for (int i = 0; i < dmas.GetLength(0); i++)
+            {
+                int nj = -1;
+                for (int j = 0; j < dmas.GetLength(1); j++)
+                {
+                    nj++;
+                    if (j == index)
+                    {
+                        nj--;
+                        continue;
+                    }
+                    newdmas[i, nj] = dmas[i, j];
+                }
+            }
+            return newdmas;
         }
     }
 }

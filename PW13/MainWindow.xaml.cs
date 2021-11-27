@@ -30,7 +30,11 @@ namespace PW13
         public MainWindow()
         {
             InitializeComponent();
-        }        
+        }
+        int iColumn, iRow;
+        string reservedvalue;
+        int indexreserving;
+        bool canundo;
         private void Open_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openfile = new OpenFileDialog
@@ -120,6 +124,23 @@ namespace PW13
         private void DataGT_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
             WorkMas.dmas = VisualArray.SyncData();
+            canundo = false;
+            string cell = DataGT.SelectedItem.ToString();
+            indexreserving = DataGT.SelectedIndex;
+            reservedvalue = cell;
+            iColumn = e.Column.DisplayIndex;
+            iRow = e.Row.GetIndex();            
+            if (iRow < WorkMas.dmas.GetLength(0))
+            {
+                canundo = true;
+                reservedvalue = WorkMas.dmas[iRow, iColumn].ToString();
+            }
+            bool tryedit = int.TryParse(((TextBox)e.EditingElement).Text, out int value);
+            if (tryedit)
+            {
+                WorkMas.dmas = VisualArray.SyncData();                
+            }
+            if (e.EditAction == DataGridEditAction.Cancel) DataGT.SelectedItem = cell;
         }
 
         private void Find_Click(object sender, RoutedEventArgs e)
@@ -146,6 +167,12 @@ namespace PW13
             if (e.KeyboardDevice.Modifiers == ModifierKeys.Alt && e.Key == Key.F4) Exit_Click(sender, e);
             if (e.Key == Key.F1) Support_Click(sender, e);
             if (e.Key == Key.F12) AboutProgram_Click(sender, e);
+            if(e.Key == Key.Delete && DataGT.SelectedIndex != -1) WorkMas.dmas = VisualArray.SyncData();
+            if (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.Z && DataGT.SelectedIndex != -1 && canundo) 
+            {
+                WorkMas.dmas[iRow, iColumn] = Convert.ToInt32(reservedvalue);
+                DataGT.ItemsSource = VisualArray.ToDataTable(WorkMas.dmas).DefaultView;
+            }
         }
 
         private void DataGT_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -154,19 +181,23 @@ namespace PW13
         }
         private void AddColumn_Click(object sender, RoutedEventArgs e)
         {
+            WorkMas.dmas = VisualArray.SyncData();
             DataGT.ItemsSource = VisualArray.AddNewColumn(WorkMas.dmas).DefaultView;            
         }
         private void AddRow_Click(object sender, RoutedEventArgs e)
         {
+            WorkMas.dmas = VisualArray.SyncData();
             DataGT.ItemsSource = VisualArray.AddNewRow().DefaultView;            
         }
         private void DeleteColumn_Click(object sender, RoutedEventArgs e)
         {
-            DataGT.ItemsSource = VisualArray.DeleteColumn(Convert.ToInt32(DataGT.CurrentCell.Column.DisplayIndex), WorkMas.dmas).DefaultView;            
+            WorkMas.dmas = VisualArray.SyncData();
+            DataGT.ItemsSource = VisualArray.DeleteColumn(WorkMas.dmas, Convert.ToInt32(DataGT.CurrentCell.Column.DisplayIndex)).DefaultView;            
         }
 
         private void DeleteRow_Click(object sender, RoutedEventArgs e)
         {
+            WorkMas.dmas = VisualArray.SyncData();
             DataGT.ItemsSource = VisualArray.DeleteRow(Convert.ToInt32(DataGT.SelectedIndex)).DefaultView;            
         }
 
