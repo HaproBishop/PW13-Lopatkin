@@ -10,11 +10,11 @@ namespace FindCountMoreAvgColumnLibrary
 /// </summary>
     public class FindCountMoreAvgColumnClass
     {/// <summary>
-    /// Возращает массив, где первая строка - среднее значение по каждому стоблцу, а вторая - количество 
-    /// значений таблицы, которые больше среднего арифметического этого столбца
-    /// </summary>
-    /// <param name="dmas"></param>
-    /// <returns></returns>
+     /// Метод для нахождения количества значений каждого столбца, которые больше его среднего арифметического значения
+     /// </summary>
+     /// <param name="dmas">Входной массив с хранящимися в нем данными</param>
+     /// <returns>Возращает массив, где первая строка - среднее значение по каждому стоблцу, а вторая - количество 
+     /// значений таблицы, которые больше среднего арифметического этого столбца</returns>
         public int[,] FindCountMoreAvgColumn(int [,] dmas)
         {
             int[,] resultarray = new int[2, dmas.GetLength(1)];
