@@ -157,6 +157,11 @@ namespace PW13
             {
                 VisualTable.ItemsSource = VisualArray.CancelChanges().DefaultView;                
             }
+            if (e.KeyboardDevice.Modifiers == ModifierKeys.Control && 
+                (e.Key == Key.Y ^ (e.Key == Key.Z && e.KeyboardDevice.Modifiers == ModifierKeys.Shift)))
+            {
+                VisualTable.ItemsSource = VisualArray.CancelUndo().DefaultView;
+            }
         }
 
         private void VisualTable_PreviewTextInput(object sender, TextCompositionEventArgs e)

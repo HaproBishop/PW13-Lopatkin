@@ -14,7 +14,6 @@ namespace VisualTable
         public static DataTable res;
         private static Stack<int[,]> reservedtable = new Stack<int[,]>();
         private static Stack<int[,]> cancelledchanges = new Stack<int[,]>();
-        public static bool _firstundo = true;
         public static Stack<int[,]> ReservedTable { get => reservedtable; }
         public static Stack<int[,]> CancelledChanges { get => cancelledchanges; }
         public static DataTable AddNewRow()
@@ -69,11 +68,6 @@ namespace VisualTable
                     row[j] = matrix[i, j];
                 }
                 res.Rows.Add(row);
-            }
-            if (_firstundo)
-            {
-                _firstundo = false;
-                ReserveTable(matrix);
             }
             return res;
         }
@@ -141,23 +135,30 @@ namespace VisualTable
         }
         public static void ReserveTable(int[,] dmas)
         {
-            reservedtable.Push(dmas);
-            cancelledchanges.Clear();
+            reservedtable.Push(dmas);            
         }
         public static DataTable CancelChanges()
         {
-            if (reservedtable.Count > 1)
+            if (reservedtable.Count > 0)
             {
-                cancelledchanges.Push(reservedtable.Peek());                
-                return ToDataTable(reservedtable.Pop());
+                SyncData();
+                cancelledchanges.Push(reservedtable.Pop());
+                try
+                {
+                    return ToDataTable(reservedtable.Pop());
+                }
+                catch
+                {
+                    return res;
+                }
             }
             return res;
         }
         public static DataTable CancelUndo()
         {
-            if (cancelledchanges.Count > 1)
-            {
-                reservedtable.Push(cancelledchanges.Peek());                
+            if (cancelledchanges.Count > 0)
+            {                                
+                SyncData();
                 return ToDataTable(cancelledchanges.Pop());                           
             }
             return res;
