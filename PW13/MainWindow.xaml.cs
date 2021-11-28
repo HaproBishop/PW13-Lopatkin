@@ -168,9 +168,11 @@ namespace PW13
             {
                 VisualTable.ItemsSource = VisualArray.CancelChanges().DefaultView;
                 
-            }            
-            if ((e.KeyboardDevice.Modifiers == (ModifierKeys.Control & ModifierKeys.Shift) && e.Key == Key.Z) ||
-                (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.Y))                
+            }
+            
+            if (((e.KeyboardDevice.Modifiers & (ModifierKeys.Control | ModifierKeys.Shift)) == 
+                (ModifierKeys.Control | ModifierKeys.Shift) && e.Key == Key.Z) ^
+                (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.Y))              
             {
                 VisualTable.ItemsSource = VisualArray.CancelUndo().DefaultView;
             }
@@ -209,7 +211,8 @@ namespace PW13
         }
 
         private void VisualTable_SourceUpdated(object sender, DataTransferEventArgs e)
-        {            
+        {       
+            
         }
     }
 }
