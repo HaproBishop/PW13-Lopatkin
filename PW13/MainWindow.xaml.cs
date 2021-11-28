@@ -46,10 +46,9 @@ namespace PW13
             {                                
                 WorkMas.Open_File(openfile.FileName); //Обращение к функции с параметром (название текстового файла, в котором хранятся данные)
                 VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas._dmas).DefaultView; //Отображение данных, считанных с файла
-                Result.Clear();
-                Find.IsEnabled = true;
-                Find_Menu.IsEnabled = true;
+                ClearResults();
                 VisualArray.ClearUndoAndCancelUndo();
+                DynamicActionsOnOrOff(e);
             }
         }
 
@@ -77,23 +76,19 @@ namespace PW13
             VisualTable.ItemsSource = WorkMas.ClearTable(); //Обращение к функции "очистки" массива и возвращение null для DataGrid(Очистка таблицы)
             VisualArray.ClearUndoAndCancelUndo();
             DynamicActionsOnOrOff(e);
-            Result.Clear();
-            Find.IsEnabled = false;
-            Find_Menu.IsEnabled = false;
+            ClearResults();
         }
 
         private void CreateMas_Click(object sender, RoutedEventArgs e)
         {
-            Result.Clear();
+            ClearResults();
             bool prv_columns = int.TryParse(CountColumns.Text, out int columns);
             bool prv_rows = int.TryParse(CountRows.Text, out int rows);
             if (prv_columns == true && prv_rows == true)
             {
                 WorkMas.CreateMas(in rows, in columns);                
                 VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas._dmas).DefaultView;
-                DynamicActionsOnOrOff(e);
-                Find.IsEnabled = true;
-                Find_Menu.IsEnabled = true;
+                DynamicActionsOnOrOff(e);                
             }           
         }
 
@@ -108,7 +103,7 @@ namespace PW13
         }
         private void Fill_Click(object sender, RoutedEventArgs e)
         {
-            Result.Clear();
+            ClearResults();
             bool prv_range = int.TryParse(Range.Text, out int range);
             if (prv_range == true && WorkMas._dmas != null) //2-ое условие - проверка на заполнение без скелета
             {                
@@ -135,12 +130,12 @@ namespace PW13
                 VisualArray.ReserveTable(WorkMas._dmas = VisualArray.SyncData());
                 VisualArray.FirstCellEditEnding = false;
             }
-            if (e.EditAction == DataGridEditAction.Cancel) VisualTable.SelectedItem = cell;
+            if (e.EditAction == DataGridEditAction.Cancel) VisualTable.SelectedItem = cell;            
         }
 
         private void Find_Click(object sender, RoutedEventArgs e)
         {            
-            Result.Text = Convert.ToString("");//Вывод ответа в строку после обращения к функции
+            CountNumbers.Text = Convert.ToString("");//Вывод ответа в строку после обращения к функции
         }//с указанными данными массива(параметр)
 
         private void CountColumns_GotFocus(object sender, RoutedEventArgs e)
@@ -213,13 +208,16 @@ namespace PW13
         }
         private void DynamicActionsOnOrOff(RoutedEventArgs e)
         {
-            if (e.Source == CreateMas)
+            if (e.Source == CreateMas || e.Source == SaveMenu)
             {
                 DynamicActions.IsEnabled = true;
                 AddColumnContextMenu.IsEnabled = true;
                 AddRowContextMenu.IsEnabled = true;
                 DeleteColumnContextMenu.IsEnabled = true;
                 DeleteRowContextMenu.IsEnabled = true;
+                Fill.IsEnabled = true;
+                Find.IsEnabled = true;
+                FindMenu.IsEnabled = true;
             }
             else
             {
@@ -228,7 +226,15 @@ namespace PW13
                 AddRowContextMenu.IsEnabled = false;
                 DeleteColumnContextMenu.IsEnabled = false;
                 DeleteRowContextMenu.IsEnabled = false;
+                Fill.IsEnabled = false;
+                Find.IsEnabled = false;
+                FindMenu.IsEnabled = false;
             }
+        }
+        private void ClearResults()
+        {
+            CountNumbers.Clear();
+            AvgOnColumn.Clear();
         }
         private void VisualTable_SourceUpdated(object sender, DataTransferEventArgs e)
         {       

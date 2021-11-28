@@ -21,25 +21,19 @@
         <GridSplitter Grid.Row="2" HorizontalAlignment="Center" Panel.ZIndex="1" VerticalAlignment="Stretch" Margin="430,0,428,0" Grid.RowSpan="2" Width="0"/>
         <Menu VerticalAlignment="Top" Margin="-1,0,1,0" Height="18">
             <MenuItem Header="Файл">
-                <MenuItem x:Name="Open_Menu" Header="Открыть" Click="Open_Click"/>
-                <MenuItem x:Name="Save_Menu" Header="Сохранить" Click="Save_Click"/>
+                <MenuItem x:Name="OpenMenu" Header="Открыть" Click="Open_Click"/>
+                <MenuItem x:Name="SaveMenu" Header="Сохранить" Click="Save_Click"/>
                 <Separator/>
-                <MenuItem x:Name="Exit_Menu" Header="Выход" Click="Exit_Click"/>
+                <MenuItem x:Name="ExitMenu" Header="Выход" Click="Exit_Click"/>
             </MenuItem>
             <MenuItem x:Name="Actions"  Header="Действия">
-                <MenuItem Header="Создание скелета таблицы">
-                    <MenuItem x:Name="CreateMas_Menu"  Header="Создать" Click="CreateMas_Click"/>
-                </MenuItem>
-                <MenuItem Header="Заполнение таблицы">
-                    <MenuItem x:Name="Fill_Menu" Header="Заполнить" Click="Fill_Click"/>
-                </MenuItem>
-                <MenuItem Header="Задание">
-                    <MenuItem x:Name="Find_Menu"  Header="Вычислить" Click="Find_Click" IsEnabled="False"/>
-                </MenuItem>
-                <MenuItem x:Name="ClearTable_Menu" Header="Очистить таблицу" Click="ClearTable_Click"/>
+            <MenuItem x:Name="CreateMasMenu"  Header="Создать" Click="CreateMas_Click"/>
+            <MenuItem x:Name="FillMenu" Header="Заполнить" Click="Fill_Click"/>
+            <MenuItem x:Name="FindMenu"  Header="Вычислить" Click="Find_Click" IsEnabled="False"/>
+            <MenuItem x:Name="ClearTableMenu" Header="Очистить таблицу" Click="ClearTable_Click"/>
             </MenuItem>
-            <MenuItem x:Name="Support_Menu" Header="Справка" Click="Support_Click"/>
-            <MenuItem x:Name="AboutProgram_Menu" Header="О программе" Click="AboutProgram_Click"/>
+            <MenuItem x:Name="SupportMenu" Header="Справка" Click="Support_Click"/>
+            <MenuItem x:Name="AboutProgramMenu" Header="О программе" Click="AboutProgram_Click"/>
         </Menu>
         <ToolBar VerticalAlignment="Top" Height="34" Grid.Row="1">
             <Button ToolTip="Открытие таблицы (Загрузка из файла)" Click="Open_Click">
@@ -103,13 +97,13 @@
                 </GroupBox>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Задание" HorizontalAlignment="Left" Height="125" Margin="412,7,0,0" VerticalAlignment="Top" Width="346" Grid.Row="3">
+        <GroupBox Header="Результаты" HorizontalAlignment="Left" Height="125" Margin="412,7,0,0" VerticalAlignment="Top" Width="346" Grid.Row="3">
             <Grid>
                 <Label Content="Количество чисел:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="Result" HorizontalAlignment="Left" Height="23" Margin="189,13,0,0" VerticalAlignment="Top" Width="129" IsReadOnly="True"/>
+                <TextBox x:Name="CountNumbers" HorizontalAlignment="Left" Height="23" Margin="189,13,0,0" VerticalAlignment="Top" Width="129" IsReadOnly="True"/>
                 <Button x:Name="Find" Content="Вычислить" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top" Width="308" Click="Find_Click" IsEnabled="False"/>
                 <Label Content="Среднее значение по столбцу:" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="Result_Copy" HorizontalAlignment="Left" Height="23" Margin="189,41,0,0" VerticalAlignment="Top" Width="129" IsReadOnly="True"/>
+                <TextBox x:Name="AvgOnColumn" HorizontalAlignment="Left" Height="23" Margin="189,41,0,0" VerticalAlignment="Top" Width="129" IsReadOnly="True"/>
             </Grid>
         </GroupBox>
         <GroupBox Header="Дополнительные функции программы" HorizontalAlignment="Left" Height="122" Margin="84,10,0,0" VerticalAlignment="Top" Width="246" Grid.Row="3">
