@@ -108,6 +108,8 @@ namespace PW13
             bool prv_range = int.TryParse(Range.Text, out int range);
             if (prv_range == true && WorkMas.dmas != null) //2-ое условие - проверка на заполнение без скелета
             {                
+                WorkMas.dmas = VisualArray.SyncData();
+                VisualArray.NeedReserve = false;
                 WorkMas.FillDMas(in range);//Обращение с передачей информации об диапазоне
                 VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas.dmas).DefaultView; //Отображение таблицы с заполненными значениями
             }
@@ -158,13 +160,12 @@ namespace PW13
             if (e.Key == Key.F12) AboutProgram_Click(sender, e);
             if (e.Key == Key.Delete && VisualTable.SelectedIndex != -1)
             {
-                VisualArray.ReserveTable(WorkMas.dmas = VisualArray.SyncData());
-                Focus();
+                VisualArray.ReserveTable(WorkMas.dmas = VisualArray.SyncData());                
             }
             if (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.Z) 
             {
                 VisualTable.ItemsSource = VisualArray.CancelChanges().DefaultView;
-                VisualTable.Focus();
+                
             }
             if (e.KeyboardDevice.Modifiers == ModifierKeys.Control && 
                 (e.Key == Key.Y ^ (e.Key == Key.Z && e.KeyboardDevice.Modifiers == ModifierKeys.Shift)))
@@ -179,27 +180,34 @@ namespace PW13
         }
         private void AddColumn_Click(object sender, RoutedEventArgs e)
         {
+            VisualArray.ReserveTable(WorkMas.dmas = VisualArray.SyncData());
             VisualTable.ItemsSource = VisualArray.AddNewColumn().DefaultView;            
         }
         private void AddRow_Click(object sender, RoutedEventArgs e)
         {
+            VisualArray.ReserveTable(WorkMas.dmas = VisualArray.SyncData());
             VisualTable.ItemsSource = VisualArray.AddNewRow().DefaultView;            
         }
         private void DeleteColumn_Click(object sender, RoutedEventArgs e)
         {
-            if(VisualTable.CurrentCell.Column.DisplayIndex != -1)
-            VisualTable.ItemsSource = VisualArray.DeleteColumn(Convert.ToInt32(VisualTable.CurrentCell.Column.DisplayIndex)).DefaultView;            
+            if (VisualTable.CurrentCell.Column.DisplayIndex != -1)
+            {
+                VisualArray.ReserveTable(WorkMas.dmas = VisualArray.SyncData());
+                VisualTable.ItemsSource = VisualArray.DeleteColumn(Convert.ToInt32(VisualTable.CurrentCell.Column.DisplayIndex)).DefaultView;
+            }
         }
 
         private void DeleteRow_Click(object sender, RoutedEventArgs e)
         {
-            if(VisualTable.SelectedIndex != -1)
-            VisualTable.ItemsSource = VisualArray.DeleteRow(Convert.ToInt32(VisualTable.SelectedIndex)).DefaultView;            
+            if (VisualTable.SelectedIndex != -1)
+            {
+                VisualArray.ReserveTable(WorkMas.dmas = VisualArray.SyncData());
+                VisualTable.ItemsSource = VisualArray.DeleteRow(Convert.ToInt32(VisualTable.SelectedIndex)).DefaultView;
+            }
         }
 
         private void VisualTable_SourceUpdated(object sender, DataTransferEventArgs e)
-        {
-            WorkMas.dmas = VisualArray.SyncData();
+        {            
         }
     }
 }

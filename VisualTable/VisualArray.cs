@@ -26,27 +26,25 @@ namespace VisualTable
             {
                 row[i] = 0;
             }
-            _res.Rows.Add(row);
-            ReserveTable(SyncData());
+            _res.Rows.Add(row);            
             return _res;
         }
         public static DataTable AddNewRow(int[] mas)
         {
-            _res.Rows.Add(mas);
-            ReserveTable(SyncData());
+            _res.Rows.Add(mas);            
             return _res;
         }
         public static DataTable DeleteRow(int index)
         {
             DataRow row = _res.Rows[index];
-            _res.Rows.Remove(row);
-            ReserveTable(SyncData());
+            _res.Rows.Remove(row);            
             return _res;
         }
         public static DataTable AddNewColumn()
         {            
             int [,]dmas = SyncData();
-            dmas = AddNewColumnIntoMas(dmas);                       
+            dmas = AddNewColumnIntoMas(dmas);
+            _needreserve = false;
             _res = ToDataTable(dmas);            
             return _res;
         }
@@ -54,6 +52,7 @@ namespace VisualTable
         {
             int[,] dmas = SyncData();
             dmas = DeleteColumnIntoMas(dmas, index);
+            _needreserve = false;
             _res = ToDataTable(dmas);
             return _res;
         }
