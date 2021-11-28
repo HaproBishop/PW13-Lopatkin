@@ -1,0 +1,42 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace FindCountMoreAvgColumnLibrary
+{/// <summary>
+/// Класс для нахождения количества значений в столбце, которые больше его среднего арифметического
+/// </summary>
+    public class FindCountMoreAvgColumnClass
+    {/// <summary>
+    /// Возращает массив, где первая строка - среднее значение по каждому стоблцу, а вторая - количество 
+    /// значений таблицы, которые больше среднего арифметического этого столбца
+    /// </summary>
+    /// <param name="dmas"></param>
+    /// <returns></returns>
+        public int[,] FindCountMoreAvgColumn(int [,] dmas)
+        {
+            int[,] resultarray = new int[2, dmas.GetLength(1)];
+            for (int j = 0; j < dmas.GetLength(1); j++)
+            {
+                int sum = 0;
+            for (int i = 0; i < dmas.GetLength(0); i++)
+            {
+                    sum += dmas[i, j];
+            }
+                resultarray[0, j] = sum / dmas.GetLength(0);             
+            }
+            for (int j = 0; j < dmas.GetLength(1); j++)
+            {
+                int count = 0;
+            for (int i = 0; i < dmas.GetLength(0); i++)
+            {
+                    if (resultarray[0, j] < dmas[i, j]) count++;
+            }
+                resultarray[1, j] = count;
+            }
+            return resultarray;
+        }
+    }
+}

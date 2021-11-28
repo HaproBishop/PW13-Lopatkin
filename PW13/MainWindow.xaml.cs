@@ -99,10 +99,9 @@ namespace PW13
 
         private void AboutProgram_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Лопаткин Сергей Михайлович. " +
-                "Практическая работа №3. Задание №8. " +
-                "Дана матрица M x N. " +
-                "В каждом столбце матрицы найти максимальный элемент",
+            MessageBox.Show("Практическая работа №13. Лопаткин Сергей Михайлович. " +
+                "Задание №8. Дана матрица размера M * N. В каждом ее столбце найти количество элементов, " +
+                "больших среднего арифметического всех элементов этого столбца",
                 "О программе", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         private void Fill_Click(object sender, RoutedEventArgs e)
