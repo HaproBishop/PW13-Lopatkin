@@ -11,79 +11,86 @@ namespace VisualTable
     //для визуализации данных 
     public static class VisualArray
     {
-        public static DataTable res;
-        private static Stack<int[,]> reservedtable = new Stack<int[,]>();
-        private static Stack<int[,]> cancelledchanges = new Stack<int[,]>();
-        public static Stack<int[,]> ReservedTable { get => reservedtable; }
-        public static Stack<int[,]> CancelledChanges { get => cancelledchanges; }
+        public static DataTable _res;
+        private static Stack<int[,]> _reservedtable = new Stack<int[,]>();
+        private static Stack<int[,]> _cancelledchanges = new Stack<int[,]>();
+        private static bool _needreserve = true;
+        public static bool NeedReserve { get => _needreserve; set => _needreserve = value; }
+        public static Stack<int[,]> ReservedTable { get => _reservedtable; }
+        public static Stack<int[,]> CancelledChanges { get => _cancelledchanges; }
         public static DataTable AddNewRow()
         {
             DataRow row;
-            row = res.NewRow();
-            for (int i = 0; i < res.Columns.Count; i++)
+            row = _res.NewRow();
+            for (int i = 0; i < _res.Columns.Count; i++)
             {
                 row[i] = 0;
             }
-            res.Rows.Add(row);
-            return res;
+            _res.Rows.Add(row);
+            ReserveTable(SyncData());
+            return _res;
         }
         public static DataTable AddNewRow(int[] mas)
         {
-            res.Rows.Add(mas);
-            return res;
+            _res.Rows.Add(mas);
+            ReserveTable(SyncData());
+            return _res;
         }
         public static DataTable DeleteRow(int index)
         {
-            DataRow row = res.Rows[index];
-            res.Rows.Remove(row);
-            return res;
+            DataRow row = _res.Rows[index];
+            _res.Rows.Remove(row);
+            ReserveTable(SyncData());
+            return _res;
         }
-        public static DataTable AddNewColumn(int [,] dmas)
+        public static DataTable AddNewColumn()
         {            
-            dmas = SyncData();
+            int [,]dmas = SyncData();
             dmas = AddNewColumnIntoMas(dmas);                       
-            res = ToDataTable(dmas);
-            return res;
+            _res = ToDataTable(dmas);            
+            return _res;
         }
-        public static DataTable DeleteColumn(int[,] dmas, int index)
-        {            
+        public static DataTable DeleteColumn(int index)
+        {
+            int[,] dmas = SyncData();
             dmas = DeleteColumnIntoMas(dmas, index);
-            res = ToDataTable(dmas);
-            return res;
+            _res = ToDataTable(dmas);
+            return _res;
         }
         //Метод для двухмерного массива
         public static DataTable ToDataTable(int[,] matrix)
         {            
-            res = new DataTable();
+            _res = new DataTable();
              for (int i = 0; i < matrix.GetLength(1); i++)
             {
-                res.Columns.Add("Column" + (i+1), typeof(string));
+                _res.Columns.Add("Column" + (i+1), typeof(string));
             }
 
             for (int i = 0; i < matrix.GetLength(0); i++)
             {
-                DataRow row = res.NewRow();
+                DataRow row = _res.NewRow();
                 for (int j = 0; j < matrix.GetLength(1); j++)
                 {
                     row[j] = matrix[i, j];
                 }
-                res.Rows.Add(row);
+                _res.Rows.Add(row);
             }
-            return res;
+            if(_needreserve)ReserveTable(matrix);
+            _needreserve = true;
+            return _res;
         }
         public static int[,] SyncData()
         {            
-            int[,] dmas = new int[res.Rows.Count, res.Columns.Count];
+            int[,] dmas = new int[_res.Rows.Count, _res.Columns.Count];
             for (int i = 0; i < dmas.GetLength(0); i++)
             {
-                DataRow row = res.Rows[i];
+                DataRow row = _res.Rows[i];
                 for (int j = 0; j < dmas.GetLength(1); j++)
                 {
                     bool prove = int.TryParse(row[j].ToString(), out dmas[i, j]);
                     if (!prove) dmas[i, j] = 0;
                 }
-            }
-            ReserveTable(dmas);
+            }            
             return dmas;
         }
         public static int[,] AddNewColumnIntoMas(int [,] dmas)
@@ -112,7 +119,7 @@ namespace VisualTable
         }
         public static void DataTableClear()
         {
-            res.Clear();            
+            _res.Clear();            
         }
         public static int[,] DeleteColumnIntoMas(int[,] dmas, int index)
         {
@@ -135,33 +142,35 @@ namespace VisualTable
         }
         public static void ReserveTable(int[,] dmas)
         {
-            reservedtable.Push(dmas);            
+            _reservedtable.Push(dmas);            
         }
         public static DataTable CancelChanges()
         {
-            if (reservedtable.Count > 0)
+            if (_reservedtable.Count > 0)
             {
-                SyncData();
-                cancelledchanges.Push(reservedtable.Pop());
+                ReserveTable(SyncData());
+                _cancelledchanges.Push(_reservedtable.Pop());
                 try
                 {
-                    return ToDataTable(reservedtable.Pop());
+                    _needreserve = false;
+                    return ToDataTable(_reservedtable.Pop());
                 }
                 catch
                 {
-                    return res;
+                    return _res;
                 }
             }
-            return res;
+            return _res;
         }
         public static DataTable CancelUndo()
         {
-            if (cancelledchanges.Count > 0)
-            {                                
-                SyncData();
-                return ToDataTable(cancelledchanges.Pop());                           
+            if (_cancelledchanges.Count > 0)
+            {
+                ReserveTable(SyncData());
+                _needreserve = false;
+                return ToDataTable(_cancelledchanges.Pop());                           
             }
-            return res;
+            return _res;
         }
     }
 }

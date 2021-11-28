@@ -30,10 +30,11 @@ namespace PW13
         public MainWindow()
         {
             InitializeComponent();
-        }        
-        
+        }
+        bool _firstedit = true;
         private void Open_Click(object sender, RoutedEventArgs e)
         {
+            WorkMas.dmas = VisualArray.SyncData();
             OpenFileDialog openfile = new OpenFileDialog
             {
                 Title = "Открытие таблицы",
@@ -54,6 +55,7 @@ namespace PW13
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
+            WorkMas.dmas = VisualArray.SyncData();
             SaveFileDialog savefile = new SaveFileDialog
             {
                 Title = "Сохранение таблицы",
@@ -123,7 +125,9 @@ namespace PW13
             bool tryedit = int.TryParse(((TextBox)e.EditingElement).Text, out int value);
             if (tryedit)
             {
-                WorkMas.dmas = VisualArray.SyncData();                                
+                if(!_firstedit)
+                VisualArray.ReserveTable(WorkMas.dmas = VisualArray.SyncData());
+                _firstedit = false;
             }
             if (e.EditAction == DataGridEditAction.Cancel) VisualTable.SelectedItem = cell;
         }
@@ -152,10 +156,15 @@ namespace PW13
             if (e.KeyboardDevice.Modifiers == ModifierKeys.Alt && e.Key == Key.F4) Exit_Click(sender, e);
             if (e.Key == Key.F1) Support_Click(sender, e);
             if (e.Key == Key.F12) AboutProgram_Click(sender, e);
-            if(e.Key == Key.Delete && VisualTable.SelectedIndex != -1) WorkMas.dmas = VisualArray.SyncData();
+            if (e.Key == Key.Delete && VisualTable.SelectedIndex != -1)
+            {
+                VisualArray.ReserveTable(WorkMas.dmas = VisualArray.SyncData());
+                Focus();
+            }
             if (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.Z) 
             {
-                VisualTable.ItemsSource = VisualArray.CancelChanges().DefaultView;                
+                VisualTable.ItemsSource = VisualArray.CancelChanges().DefaultView;
+                VisualTable.Focus();
             }
             if (e.KeyboardDevice.Modifiers == ModifierKeys.Control && 
                 (e.Key == Key.Y ^ (e.Key == Key.Z && e.KeyboardDevice.Modifiers == ModifierKeys.Shift)))
@@ -170,7 +179,7 @@ namespace PW13
         }
         private void AddColumn_Click(object sender, RoutedEventArgs e)
         {
-            VisualTable.ItemsSource = VisualArray.AddNewColumn(WorkMas.dmas).DefaultView;            
+            VisualTable.ItemsSource = VisualArray.AddNewColumn().DefaultView;            
         }
         private void AddRow_Click(object sender, RoutedEventArgs e)
         {
@@ -178,16 +187,18 @@ namespace PW13
         }
         private void DeleteColumn_Click(object sender, RoutedEventArgs e)
         {
-            VisualTable.ItemsSource = VisualArray.DeleteColumn(WorkMas.dmas, Convert.ToInt32(VisualTable.CurrentCell.Column.DisplayIndex)).DefaultView;            
+            if(VisualTable.CurrentCell.Column.DisplayIndex != -1)
+            VisualTable.ItemsSource = VisualArray.DeleteColumn(Convert.ToInt32(VisualTable.CurrentCell.Column.DisplayIndex)).DefaultView;            
         }
 
         private void DeleteRow_Click(object sender, RoutedEventArgs e)
         {
+            if(VisualTable.SelectedIndex != -1)
             VisualTable.ItemsSource = VisualArray.DeleteRow(Convert.ToInt32(VisualTable.SelectedIndex)).DefaultView;            
         }
 
         private void VisualTable_SourceUpdated(object sender, DataTransferEventArgs e)
-        {            
+        {
             WorkMas.dmas = VisualArray.SyncData();
         }
     }
