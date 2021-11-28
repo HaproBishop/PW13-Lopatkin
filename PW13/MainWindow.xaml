@@ -78,14 +78,14 @@
                         <Label Content="Количество столбцов:" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top"/>
                     </Grid>
                 </GroupBox>
-                <GroupBox Header="Заполнение таблицы" HorizontalAlignment="Left" Height="94" Margin="0,129,0,0" VerticalAlignment="Top" Width="211" Grid.ColumnSpan="2">
+                <GroupBox x:Name="FillOfRandom" Header="Заполнение таблицы" HorizontalAlignment="Left" Height="94" Margin="0,129,0,0" VerticalAlignment="Top" Width="211" Grid.ColumnSpan="2" IsEnabled="False">
                     <Grid>
                         <Label Content="Диапазон:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                         <TextBox x:Name="Range" HorizontalAlignment="Left" Height="23" Margin="124,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="66" MaxLength="3" GotFocus="Range_GotFocus"/>
                         <Button x:Name="Fill" Content="Заполнить" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="180" Click="Fill_Click" Focusable="False"/>
                     </Grid>
                 </GroupBox>
-                <Button x:Name="ClearTable" Content="Очистить таблицу" HorizontalAlignment="Left" Margin="0,231,0,0" VerticalAlignment="Top" Width="371" Click="ClearTable_Click" Grid.ColumnSpan="2"/>
+                <Button x:Name="ClearTable" Content="Очистить таблицу" HorizontalAlignment="Left" Margin="0,231,0,0" VerticalAlignment="Top" Width="371" Click="ClearTable_Click" Grid.ColumnSpan="2" IsEnabled="False"/>
                 <GroupBox x:Name="DynamicActions" Header="Динамические действия" HorizontalAlignment="Left" Height="213" Margin="216,10,0,0" VerticalAlignment="Top" Width="165" IsEnabled="False">
                     <Grid>
                         <Button x:Name="AddColumn" Content="Добавить столбец" HorizontalAlignment="Left" VerticalAlignment="Top" Width="133" Click="AddColumn_Click" Focusable="False" Margin="10,12,0,0" Height="29"/>
@@ -113,7 +113,7 @@
                 <Button x:Name="Exit" Content="Выход" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" Width="214" Click="Exit_Click" IsCancel="True" Height="20"/>
             </Grid>
         </GroupBox>
-        <DataGrid x:Name="VisualTable" Margin="412,10,10,10" CellEditEnding="VisualTable_CellEditEnding" Grid.Row="2" PreviewTextInput="VisualTable_PreviewTextInput" SourceUpdated="VisualTable_SourceUpdated">
+        <DataGrid x:Name="VisualTable" Margin="412,10,10,10" CellEditEnding="VisualTable_CellEditEnding" Grid.Row="2" PreviewTextInput="VisualTable_PreviewTextInput">
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem x:Name="AddColumnContextMenu" Header="Добавить столбец" IsEnabled="False" Click="AddColumn_Click"/>

@@ -99,7 +99,11 @@ namespace PW13
 
         private void AboutProgram_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Лопаткин Сергей Михайлович. Практическая работа №3. Задание №8. Дана матрица M x N. В каждом столбце матрицы найти максимальный элемент","О программе", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Лопаткин Сергей Михайлович. " +
+                "Практическая работа №3. Задание №8. " +
+                "Дана матрица M x N. " +
+                "В каждом столбце матрицы найти максимальный элемент",
+                "О программе", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         private void Fill_Click(object sender, RoutedEventArgs e)
         {
@@ -112,12 +116,15 @@ namespace PW13
                 WorkMas.FillDMas(in range);//Обращение с передачей информации об диапазоне
                 VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas._dmas).DefaultView; //Отображение таблицы с заполненными значениями
             }
-            else MessageBox.Show("У вас нет скелета таблицы или введен некорректно диапазон значений", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Error);
+            else MessageBox.Show("Введен некорректно диапазон значений",
+                "Внимание!", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void Support_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("1) В программе нельзя вводить более трехзначных чисел для диапазона и двухзначных для столбцов и строк.\n2)Заполнение происходит от 0 до указанного вами значенияю\n3)Для включения кнопки \"Выполнить\" необходимо создать таблицу.", "Справка", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("1) В программе нельзя вводить более трехзначных чисел для диапазона и двухзначных для столбцов и строк.\n" +
+                "2)Заполнение происходит от 0 до указанного вами значения\n" +
+                "3)Для включения кнопок \"Выполнить\" и \"Заполнить\" необходимо создать таблицу.", "Справка", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void VisualTable_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
@@ -208,16 +215,18 @@ namespace PW13
         }
         private void DynamicActionsOnOrOff(RoutedEventArgs e)
         {
-            if (e.Source == CreateMas || e.Source == SaveMenu)
+            if (e.Source == CreateMas || e.Source == CreateMasMenu 
+                || e.Source == OpenMenu)
             {
                 DynamicActions.IsEnabled = true;
                 AddColumnContextMenu.IsEnabled = true;
                 AddRowContextMenu.IsEnabled = true;
                 DeleteColumnContextMenu.IsEnabled = true;
-                DeleteRowContextMenu.IsEnabled = true;
-                Fill.IsEnabled = true;
+                DeleteRowContextMenu.IsEnabled = true;                
                 Find.IsEnabled = true;
                 FindMenu.IsEnabled = true;
+                FillOfRandom.IsEnabled = true;
+                ClearTable.IsEnabled = true;
             }
             else
             {
@@ -225,20 +234,17 @@ namespace PW13
                 AddColumnContextMenu.IsEnabled = false;
                 AddRowContextMenu.IsEnabled = false;
                 DeleteColumnContextMenu.IsEnabled = false;
-                DeleteRowContextMenu.IsEnabled = false;
-                Fill.IsEnabled = false;
+                DeleteRowContextMenu.IsEnabled = false;                
                 Find.IsEnabled = false;
                 FindMenu.IsEnabled = false;
+                FillOfRandom.IsEnabled = false;
+                ClearTable.IsEnabled = false;
             }
         }
         private void ClearResults()
         {
             CountNumbers.Clear();
             AvgOnColumn.Clear();
-        }
-        private void VisualTable_SourceUpdated(object sender, DataTransferEventArgs e)
-        {       
-            
         }
     }
 }
