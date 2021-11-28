@@ -49,6 +49,7 @@ namespace PW13
                 Result.Clear();
                 Find.IsEnabled = true;
                 Find_Menu.IsEnabled = true;
+                VisualArray.ClearUndoAndCancelUndo();
             }
         }
 
@@ -67,12 +68,14 @@ namespace PW13
             {                
                 WorkMas._twomas = true;                
                 WorkMas.Save_File(savefile.FileName); //Обращение к функции с параметром (аналогично предыдущему) 
+                VisualArray.ClearUndoAndCancelUndo();
             }
         }
 
         private void ClearTable_Click(object sender, RoutedEventArgs e)
         {
             VisualTable.ItemsSource = WorkMas.ClearTable(); //Обращение к функции "очистки" массива и возвращение null для DataGrid(Очистка таблицы)
+            VisualArray.ClearUndoAndCancelUndo();
             Result.Clear();
             Find.IsEnabled = false;
             Find_Menu.IsEnabled = false;
@@ -85,7 +88,7 @@ namespace PW13
             bool prv_rows = int.TryParse(CountRows.Text, out int rows);
             if (prv_columns == true && prv_rows == true)
             {
-                WorkMas.CreateMas(in rows, in columns);
+                WorkMas.CreateMas(in rows, in columns);                
                 VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas._dmas).DefaultView;
                 Find.IsEnabled = true;
                 Find_Menu.IsEnabled = true;
@@ -165,9 +168,9 @@ namespace PW13
             {
                 VisualTable.ItemsSource = VisualArray.CancelChanges().DefaultView;
                 
-            }
-            if (e.KeyboardDevice.Modifiers == ModifierKeys.Control && 
-                (e.Key == Key.Y ^ (e.Key == Key.Z && e.KeyboardDevice.Modifiers == ModifierKeys.Shift)))
+            }            
+            if ((e.KeyboardDevice.Modifiers == (ModifierKeys.Control & ModifierKeys.Shift) && e.Key == Key.Z) ||
+                (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.Y))                
             {
                 VisualTable.ItemsSource = VisualArray.CancelUndo().DefaultView;
             }

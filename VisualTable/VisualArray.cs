@@ -28,7 +28,7 @@ namespace VisualTable
         /// WorkMas.dmas = VisualArray.SyncData();
         /// VisualArray.NeedReserve = false;
         /// WorkMas.FillDMas(in range); - метод для заполнения массива значениями
-        /// VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas.dmas).DefaultView;
+        /// VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas.dmas).DefaultView;        
         /// </summary>
         public static bool NeedReserve { get => _needreserve; set => _needreserve = value; }
         /// <summary>
@@ -41,6 +41,28 @@ namespace VisualTable
         public static bool FirstCellEditEnding { get => _firstcelleditending; set => _firstcelleditending = value; }
         public static Stack<int[,]> ReservedTable { get => _reservedtable; }
         public static Stack<int[,]> CancelledChanges { get => _cancelledchanges; }
+        //Метод для заполнения таблицы значениями двумерного массива
+        public static DataTable ToDataTable(int[,] matrix)
+        {            
+            _res = new DataTable();
+             for (int i = 0; i < matrix.GetLength(1); i++)
+            {
+                _res.Columns.Add("Column" + (i+1), typeof(string));
+            }
+
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                DataRow row = _res.NewRow();
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                {
+                    row[j] = matrix[i, j];
+                }
+                _res.Rows.Add(row);
+            }
+            if(_needreserve)ReserveTable(matrix);
+            _needreserve = true;
+            return _res;
+        }
         /// <summary>
         /// Добавление новой строки в таблицу
         /// </summary>
@@ -96,28 +118,6 @@ namespace VisualTable
             dmas = DeleteColumnIntoMas(dmas, index);
             _needreserve = false;
             _res = ToDataTable(dmas);
-            return _res;
-        }
-        //Метод для заполнения таблицы значениями двумерного массива
-        public static DataTable ToDataTable(int[,] matrix)
-        {            
-            _res = new DataTable();
-             for (int i = 0; i < matrix.GetLength(1); i++)
-            {
-                _res.Columns.Add("Column" + (i+1), typeof(string));
-            }
-
-            for (int i = 0; i < matrix.GetLength(0); i++)
-            {
-                DataRow row = _res.NewRow();
-                for (int j = 0; j < matrix.GetLength(1); j++)
-                {
-                    row[j] = matrix[i, j];
-                }
-                _res.Rows.Add(row);
-            }
-            if(_needreserve)ReserveTable(matrix);
-            _needreserve = true;
             return _res;
         }
         public static int[,] SyncData()
@@ -200,12 +200,13 @@ namespace VisualTable
         /// </summary>
         /// <param name="dmas"></param>
         public static void ReserveTable(int[,] dmas)
-        {
-            _reservedtable.Push(dmas);            
+        {            
+             _reservedtable.Push(dmas);
+
         }/// <summary>
-        /// Отмена изменений таблицы
-        /// </summary>
-        /// <returns></returns>
+         /// Отмена изменений таблицы
+         /// </summary>
+         /// <returns></returns>
         public static DataTable CancelChanges()
         {
             if (_reservedtable.Count > 0)
@@ -234,9 +235,14 @@ namespace VisualTable
             {
                 ReserveTable(SyncData());
                 _needreserve = false;
-                return ToDataTable(_cancelledchanges.Pop());                           
+                return ToDataTable(_cancelledchanges.Pop());
             }
             return _res;
+        }
+        public static void ClearUndoAndCancelUndo()
+        {
+            _cancelledchanges = new Stack<int[,]>();
+            _reservedtable = new Stack<int[,]>();
         }
     }
 }
