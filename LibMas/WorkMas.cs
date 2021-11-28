@@ -10,32 +10,32 @@ namespace LibMas
 {
     public class WorkMas
     {
-        public static int[] mas;
-        public static int[,] dmas;
-        public static bool twomas;
+        public static int[] _mas;
+        public static int[,] _dmas;
+        public static bool _twomas;
         public static void Open_File(in string filename) //Открытие файла 
         {
             StreamReader file = new StreamReader(filename);
-            twomas = Convert.ToBoolean(file.ReadLine());//Считывание значения (двумерный(true) и одномерный(false))
-            if (twomas == false) //Чтение данных для одномерного массива
+            _twomas = Convert.ToBoolean(file.ReadLine());//Считывание значения (двумерный(true) и одномерный(false))
+            if (_twomas == false) //Чтение данных для одномерного массива
             {
                 int length = Convert.ToInt32(file.ReadLine());
-                mas = new int[length];
+                _mas = new int[length];
                 for (int i = 0; i < length; i++)
                 {
-                    mas[i] = Convert.ToInt32(file.ReadLine());
+                    _mas[i] = Convert.ToInt32(file.ReadLine());
                 }
             }
-            else if(twomas == true) //Чтение данных для двумерного массива
+            else if(_twomas == true) //Чтение данных для двумерного массива
             {
                 int rowslength = Convert.ToInt32(file.ReadLine());
                 int columnslength = Convert.ToInt32(file.ReadLine());
-                dmas = new int[rowslength, columnslength];
-                for (int i = 0; i < dmas.GetLength(0); i++)
+                _dmas = new int[rowslength, columnslength];
+                for (int i = 0; i < _dmas.GetLength(0); i++)
                 {
-                    for (int j = 0; j < dmas.GetLength(1); j++)
+                    for (int j = 0; j < _dmas.GetLength(1); j++)
                     {
-                        dmas[i,j] = Convert.ToInt32(file.ReadLine());
+                        _dmas[i,j] = Convert.ToInt32(file.ReadLine());
                     }
                 }
             }
@@ -44,25 +44,25 @@ namespace LibMas
         public static void Save_File(in string filename)
         {            
             StreamWriter file = new StreamWriter(filename);
-            if (twomas == false) //Сохранение данных таблицы с одномерным массивом
+            if (_twomas == false) //Сохранение данных таблицы с одномерным массивом
             {
                 file.WriteLine("false");
-                file.WriteLine(mas.Length);
-                for (int i = 0; i < mas.Length; i++)
+                file.WriteLine(_mas.Length);
+                for (int i = 0; i < _mas.Length; i++)
                 {
-                    file.WriteLine(mas[i]);
+                    file.WriteLine(_mas[i]);
                 }
             }
-            else if (twomas == true) //Сохранение данных таблицы с двумерным массивом
+            else if (_twomas == true) //Сохранение данных таблицы с двумерным массивом
             {
                 file.WriteLine("true");
-                file.WriteLine(dmas.GetLength(0));
-                file.WriteLine(dmas.GetLength(1));
-                for (int i = 0; i < dmas.GetLength(0); i++)
+                file.WriteLine(_dmas.GetLength(0));
+                file.WriteLine(_dmas.GetLength(1));
+                for (int i = 0; i < _dmas.GetLength(0); i++)
                 {
-                    for (int j = 0; j < dmas.GetLength(1); j++)
+                    for (int j = 0; j < _dmas.GetLength(1); j++)
                     {
-                        file.WriteLine(dmas[i,j]);
+                        file.WriteLine(_dmas[i,j]);
                     }
                 }
             }
@@ -70,35 +70,35 @@ namespace LibMas
         }
         public static int[] ClearTable() //Очистка таблицы 
         {
-            mas = null;
-            dmas = null;
+            _mas = null;
+            _dmas = null;
             return null;
         }
         public static void CreateMas(in int length) //Создание пустой таблицы(скелет). Одномерный массив
         {
-            mas = new int[length]; 
+            _mas = new int[length]; 
         }
         public static void CreateMas(in int rows, in int columns)//Создание пустой таблицы. Двумерный массив
         {
-            dmas = new int[rows,columns];
+            _dmas = new int[rows,columns];
         }
 
         public static void FillMas(in int range) //Заполнение таблицы для одномерного массива
         {
             Random rnd = new Random();
-            for (int i = 0; i < mas.Length; i++)
+            for (int i = 0; i < _mas.Length; i++)
             {
-                mas[i] = rnd.Next(range);
+                _mas[i] = rnd.Next(range);
             }
         }
         public static void FillDMas(in int range) //Заполнение таблицы для двумерного массива
         {
             Random rnd = new Random();            
-            for (int i = 0; i < dmas.GetLength(0); i++)
+            for (int i = 0; i < _dmas.GetLength(0); i++)
             {
-                for (int j = 0; j < dmas.GetLength(1); j++)
+                for (int j = 0; j < _dmas.GetLength(1); j++)
                 {
-                    dmas[i, j] = rnd.Next(range);
+                    _dmas[i, j] = rnd.Next(range);
                 }                
             }
         }

@@ -7,17 +7,44 @@ using System.Data;
 
 namespace VisualTable
 {
-    //Класс для связывания массива с элементом DataGrid
-    //для визуализации данных 
+    /// <summary>
+    ///Класс для связывания массива с элементом DataGrid
+    ///для визуализации данных, где усовершенствовано на удаление значений, восстановление при необходимости.
+    ///тоит заметить одну отличительную черту в данном классе - перед любыми действиями скелетом таблицы необходимо синхронизировать данные
+    ///Данные резервируются посредством взаимодействия двух методов ReserveTable и SyncData
+    ///Пример: VisualArray.ReserveTable(SyncData());
+    /// </summary>
     public static class VisualArray
-    {
-        public static DataTable _res;
-        private static Stack<int[,]> _reservedtable = new Stack<int[,]>();
-        private static Stack<int[,]> _cancelledchanges = new Stack<int[,]>();
-        private static bool _needreserve = true;
+    {        
+        public static DataTable _res;//Таблица
+        private static Stack<int[,]> _reservedtable = new Stack<int[,]>();//Стек массивов(Зарезервированные таблицы)
+        private static Stack<int[,]> _cancelledchanges = new Stack<int[,]>();//Стек массивов с отмененными изменениями
+        private static bool _needreserve = true;//Используется для свойства NeedReserve
+        private static bool _firstcelleditending = true;//Значение для FirstCellEditEnding
+        /// <summary>
+        /// Используется в случаях, когда при обновлении таблицы не нужно резервировать данные для последующего
+        /// ее восстановления. Нужно false для изменения значений ячеек
+        /// Пример:
+        /// WorkMas.dmas = VisualArray.SyncData();
+        /// VisualArray.NeedReserve = false;
+        /// WorkMas.FillDMas(in range); - метод для заполнения массива значениями
+        /// VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas.dmas).DefaultView;
+        /// </summary>
         public static bool NeedReserve { get => _needreserve; set => _needreserve = value; }
+        /// <summary>
+        /// Обязательно используется для предотвращения первого резерва совместно с синхронизацией данных
+        /// Применимо к следующей строке кода: VisualArray.ReserveTable(WorkMas.dmas = VisualArray.SyncData());
+        /// Проверка задается условием
+        /// true - по умолчанию. После первого изменения необходимо выставить false;
+        /// Использовать исключительно для события CellEditEnding
+        /// </summary>
+        public static bool FirstCellEditEnding { get => _firstcelleditending; set => _firstcelleditending = value; }
         public static Stack<int[,]> ReservedTable { get => _reservedtable; }
         public static Stack<int[,]> CancelledChanges { get => _cancelledchanges; }
+        /// <summary>
+        /// Добавление новой строки в таблицу
+        /// </summary>
+        /// <returns></returns>
         public static DataTable AddNewRow()
         {
             DataRow row;
@@ -28,18 +55,29 @@ namespace VisualTable
             }
             _res.Rows.Add(row);            
             return _res;
-        }
+        }/// <summary>
+        /// Добавление строки посредством одномерного массива
+        /// </summary>
+        /// <param name="mas"></param>
+        /// <returns></returns>
         public static DataTable AddNewRow(int[] mas)
         {
             _res.Rows.Add(mas);            
             return _res;
-        }
+        }/// <summary>
+        /// Удаление строки из таблицы (динамически по индексу)
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public static DataTable DeleteRow(int index)
         {
             DataRow row = _res.Rows[index];
             _res.Rows.Remove(row);            
             return _res;
-        }
+        }/// <summary>
+        /// Добавление столбца в таблицу
+        /// </summary>
+        /// <returns></returns>
         public static DataTable AddNewColumn()
         {            
             int [,]dmas = SyncData();
@@ -47,7 +85,11 @@ namespace VisualTable
             _needreserve = false;
             _res = ToDataTable(dmas);            
             return _res;
-        }
+        }/// <summary>
+        /// Удаление столбца в таблице (динамически по индексу)
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public static DataTable DeleteColumn(int index)
         {
             int[,] dmas = SyncData();
@@ -56,7 +98,7 @@ namespace VisualTable
             _res = ToDataTable(dmas);
             return _res;
         }
-        //Метод для двухмерного массива
+        //Метод для заполнения таблицы значениями двумерного массива
         public static DataTable ToDataTable(int[,] matrix)
         {            
             _res = new DataTable();
@@ -91,7 +133,11 @@ namespace VisualTable
                 }
             }            
             return dmas;
-        }
+        }/// <summary>
+        /// Добавление столбца в массив
+        /// </summary>
+        /// <param name="dmas"></param>
+        /// <returns></returns>
         public static int[,] AddNewColumnIntoMas(int [,] dmas)
         {
             int[,] newdmas = new int[dmas.GetLength(0), dmas.GetLength(1) + 1];
@@ -103,7 +149,11 @@ namespace VisualTable
                 }
             }
             return newdmas;
-        }
+        }/// <summary>
+        /// Добавление новой строки в массив
+        /// </summary>
+        /// <param name="dmas"></param>
+        /// <returns></returns>
         public static int[,] AddNewRowIntoMas(int[,] dmas)
         {
             int[,] newdmas = new int[dmas.GetLength(0) + 1, dmas.GetLength(1)];
@@ -119,7 +169,12 @@ namespace VisualTable
         public static void DataTableClear()
         {
             _res.Clear();            
-        }
+        }/// <summary>
+        /// Удаление столбца внутри массива(динамически по индексу)
+        /// </summary>
+        /// <param name="dmas"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public static int[,] DeleteColumnIntoMas(int[,] dmas, int index)
         {
             int[,] newdmas = new int[dmas.GetLength(0), dmas.GetLength(1) - 1];           
@@ -138,11 +193,19 @@ namespace VisualTable
                 }
             }
             return newdmas;
-        }
+        }/// <summary>
+        /// Используется при любом изменении скелета таблицы
+        /// P.S. Используется совместно с SyncData методом в данном классе
+        /// Пример: ReserveTable(SyncData());
+        /// </summary>
+        /// <param name="dmas"></param>
         public static void ReserveTable(int[,] dmas)
         {
             _reservedtable.Push(dmas);            
-        }
+        }/// <summary>
+        /// Отмена изменений таблицы
+        /// </summary>
+        /// <returns></returns>
         public static DataTable CancelChanges()
         {
             if (_reservedtable.Count > 0)
@@ -161,6 +224,10 @@ namespace VisualTable
             }
             return _res;
         }
+        /// <summary>
+        /// Отмена возврата изменений
+        /// </summary>
+        /// <returns></returns>
         public static DataTable CancelUndo()
         {
             if (_cancelledchanges.Count > 0)

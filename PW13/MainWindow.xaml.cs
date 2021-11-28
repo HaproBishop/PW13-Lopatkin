@@ -30,11 +30,10 @@ namespace PW13
         public MainWindow()
         {
             InitializeComponent();
-        }
-        bool _firstedit = true;
+        }        
         private void Open_Click(object sender, RoutedEventArgs e)
         {
-            WorkMas.dmas = VisualArray.SyncData();
+            WorkMas._dmas = VisualArray.SyncData();
             OpenFileDialog openfile = new OpenFileDialog
             {
                 Title = "Открытие таблицы",
@@ -46,7 +45,7 @@ namespace PW13
             if (openfile.ShowDialog() == true) 
             {                                
                 WorkMas.Open_File(openfile.FileName); //Обращение к функции с параметром (название текстового файла, в котором хранятся данные)
-                VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas.dmas).DefaultView; //Отображение данных, считанных с файла
+                VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas._dmas).DefaultView; //Отображение данных, считанных с файла
                 Result.Clear();
                 Find.IsEnabled = true;
                 Find_Menu.IsEnabled = true;
@@ -55,7 +54,7 @@ namespace PW13
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            WorkMas.dmas = VisualArray.SyncData();
+            WorkMas._dmas = VisualArray.SyncData();
             SaveFileDialog savefile = new SaveFileDialog
             {
                 Title = "Сохранение таблицы",
@@ -66,7 +65,7 @@ namespace PW13
 
             if (savefile.ShowDialog() == true)
             {                
-                WorkMas.twomas = true;                
+                WorkMas._twomas = true;                
                 WorkMas.Save_File(savefile.FileName); //Обращение к функции с параметром (аналогично предыдущему) 
             }
         }
@@ -87,7 +86,7 @@ namespace PW13
             if (prv_columns == true && prv_rows == true)
             {
                 WorkMas.CreateMas(in rows, in columns);
-                VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas.dmas).DefaultView;
+                VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas._dmas).DefaultView;
                 Find.IsEnabled = true;
                 Find_Menu.IsEnabled = true;
             }           
@@ -106,12 +105,12 @@ namespace PW13
         {
             Result.Clear();
             bool prv_range = int.TryParse(Range.Text, out int range);
-            if (prv_range == true && WorkMas.dmas != null) //2-ое условие - проверка на заполнение без скелета
+            if (prv_range == true && WorkMas._dmas != null) //2-ое условие - проверка на заполнение без скелета
             {                
-                WorkMas.dmas = VisualArray.SyncData();
+                WorkMas._dmas = VisualArray.SyncData();
                 VisualArray.NeedReserve = false;
                 WorkMas.FillDMas(in range);//Обращение с передачей информации об диапазоне
-                VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas.dmas).DefaultView; //Отображение таблицы с заполненными значениями
+                VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas._dmas).DefaultView; //Отображение таблицы с заполненными значениями
             }
             else MessageBox.Show("У вас нет скелета таблицы или введен некорректно диапазон значений", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Error);
         }
@@ -127,9 +126,9 @@ namespace PW13
             bool tryedit = int.TryParse(((TextBox)e.EditingElement).Text, out int value);
             if (tryedit)
             {
-                if(!_firstedit)
-                VisualArray.ReserveTable(WorkMas.dmas = VisualArray.SyncData());
-                _firstedit = false;
+                if(!VisualArray.FirstCellEditEnding)
+                VisualArray.ReserveTable(WorkMas._dmas = VisualArray.SyncData());
+                VisualArray.FirstCellEditEnding = false;
             }
             if (e.EditAction == DataGridEditAction.Cancel) VisualTable.SelectedItem = cell;
         }
@@ -160,7 +159,7 @@ namespace PW13
             if (e.Key == Key.F12) AboutProgram_Click(sender, e);
             if (e.Key == Key.Delete && VisualTable.SelectedIndex != -1)
             {
-                VisualArray.ReserveTable(WorkMas.dmas = VisualArray.SyncData());                
+                VisualArray.ReserveTable(WorkMas._dmas = VisualArray.SyncData());                
             }
             if (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.Z) 
             {
@@ -180,19 +179,19 @@ namespace PW13
         }
         private void AddColumn_Click(object sender, RoutedEventArgs e)
         {
-            VisualArray.ReserveTable(WorkMas.dmas = VisualArray.SyncData());
+            VisualArray.ReserveTable(WorkMas._dmas = VisualArray.SyncData());
             VisualTable.ItemsSource = VisualArray.AddNewColumn().DefaultView;            
         }
         private void AddRow_Click(object sender, RoutedEventArgs e)
         {
-            VisualArray.ReserveTable(WorkMas.dmas = VisualArray.SyncData());
+            VisualArray.ReserveTable(WorkMas._dmas = VisualArray.SyncData());
             VisualTable.ItemsSource = VisualArray.AddNewRow().DefaultView;            
         }
         private void DeleteColumn_Click(object sender, RoutedEventArgs e)
         {
             if (VisualTable.CurrentCell.Column.DisplayIndex != -1)
             {
-                VisualArray.ReserveTable(WorkMas.dmas = VisualArray.SyncData());
+                VisualArray.ReserveTable(WorkMas._dmas = VisualArray.SyncData());
                 VisualTable.ItemsSource = VisualArray.DeleteColumn(Convert.ToInt32(VisualTable.CurrentCell.Column.DisplayIndex)).DefaultView;
             }
         }
@@ -201,7 +200,7 @@ namespace PW13
         {
             if (VisualTable.SelectedIndex != -1)
             {
-                VisualArray.ReserveTable(WorkMas.dmas = VisualArray.SyncData());
+                VisualArray.ReserveTable(WorkMas._dmas = VisualArray.SyncData());
                 VisualTable.ItemsSource = VisualArray.DeleteRow(Convert.ToInt32(VisualTable.SelectedIndex)).DefaultView;
             }
         }
