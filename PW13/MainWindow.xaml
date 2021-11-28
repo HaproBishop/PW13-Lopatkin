@@ -75,10 +75,6 @@
         </ToolBar>
         <GroupBox Header="Таблица" HorizontalAlignment="Left" Height="284" Margin="10,10,0,0" VerticalAlignment="Top" Width="393" Grid.Row="2">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="59*"/>
-                    <ColumnDefinition Width="399*"/>
-                </Grid.ColumnDefinitions>
                 <GroupBox Header="Создание скелета таблицы" HorizontalAlignment="Left" Height="119" Margin="0,10,0,0" VerticalAlignment="Top" Width="211" Grid.ColumnSpan="2">
                     <Grid>
                         <Label Content="Количество строк:" HorizontalAlignment="Left" Margin="10,38,0,0" VerticalAlignment="Top"/>
@@ -96,7 +92,7 @@
                     </Grid>
                 </GroupBox>
                 <Button x:Name="ClearTable" Content="Очистить таблицу" HorizontalAlignment="Left" Margin="0,231,0,0" VerticalAlignment="Top" Width="371" Click="ClearTable_Click" Grid.ColumnSpan="2"/>
-                <GroupBox Grid.Column="1" Header="Динамические действия" HorizontalAlignment="Left" Height="213" Margin="167,10,0,0" VerticalAlignment="Top" Width="165">
+                <GroupBox x:Name="DynamicActions" Header="Динамические действия" HorizontalAlignment="Left" Height="213" Margin="216,10,0,0" VerticalAlignment="Top" Width="165" IsEnabled="False">
                     <Grid>
                         <Button x:Name="AddColumn" Content="Добавить столбец" HorizontalAlignment="Left" VerticalAlignment="Top" Width="133" Click="AddColumn_Click" Focusable="False" Margin="10,12,0,0" Height="29"/>
                         <Button x:Name="DeleteColumn" Content="Удалить столбец" HorizontalAlignment="Left" VerticalAlignment="Top" Width="133" Click="DeleteColumn_Click" Focusable="False" Margin="10,55,0,0" Height="28"/>
@@ -123,6 +119,16 @@
                 <Button x:Name="Exit" Content="Выход" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" Width="214" Click="Exit_Click" IsCancel="True" Height="20"/>
             </Grid>
         </GroupBox>
-        <DataGrid x:Name="VisualTable" Margin="412,10,10,10" CellEditEnding="VisualTable_CellEditEnding" Grid.Row="2" PreviewTextInput="VisualTable_PreviewTextInput" SourceUpdated="VisualTable_SourceUpdated"/>
+        <DataGrid x:Name="VisualTable" Margin="412,10,10,10" CellEditEnding="VisualTable_CellEditEnding" Grid.Row="2" PreviewTextInput="VisualTable_PreviewTextInput" SourceUpdated="VisualTable_SourceUpdated">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Добавить столбец" Click="AddColumn_Click"/>
+                    <MenuItem Header="Удалить столбец" Click="DeleteColumn_Click"/>
+                    <MenuItem Header="Добавить строку" Click="AddRow_Click"/>
+                    <MenuItem Header="Удалить строку" Click="DeleteRow_Click"/>
+                    <MenuItem Header="Очистить таблицу" Click="ClearTable_Click"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
     </Grid>
 </Window>
