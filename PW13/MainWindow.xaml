@@ -5,21 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PW13"
         mc:Ignorable="d"
-        Title="Таблица Элементов" Height="568" Width="776" ResizeMode="CanResize" Icon="icons/LogoIco.ico" KeyDown="MainWin_KeyDown">
+        Title="Таблица Элементов" Height="697" Width="1022" ResizeMode="CanResize" Icon="icons/LogoIco.ico" KeyDown="MainWin_KeyDown">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="251*"/>
+            <ColumnDefinition Width="256*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="35"/>
-            <RowDefinition Height="301*"/>
-            <RowDefinition Height="183*"/>
+            <RowDefinition Height="129*"/>
+            <RowDefinition Height="143*"/>
+            <RowDefinition Height="342*"/>
         </Grid.RowDefinitions>
-        <StatusBar VerticalAlignment="Bottom" Grid.Row="3" Height="22" HorizontalContentAlignment="Right">
+        <StatusBar VerticalAlignment="Bottom" Grid.Row="4" Height="22" HorizontalContentAlignment="Right" Grid.ColumnSpan="2">
             <TextBlock x:Name="CurrentCell"/>
             <Separator/>
             <TextBlock x:Name="TableLength"/>
         </StatusBar>
-        <GridSplitter Grid.Row="2" HorizontalAlignment="Center" Panel.ZIndex="1" VerticalAlignment="Stretch" Margin="430,0,428,0" Grid.RowSpan="2" Width="0"/>
-        <Menu VerticalAlignment="Top" Margin="-1,0,1,0" Height="18">
+        <Menu VerticalAlignment="Top" Margin="-1,0,1,0" Height="18" Grid.ColumnSpan="2">
             <MenuItem Header="Файл">
                 <MenuItem x:Name="OpenMenu" Header="Открыть" Click="Open_Click"/>
                 <MenuItem x:Name="SaveMenu" Header="Сохранить" Click="Save_Click"/>
@@ -27,15 +31,15 @@
                 <MenuItem x:Name="ExitMenu" Header="Выход" Click="Exit_Click"/>
             </MenuItem>
             <MenuItem x:Name="Actions"  Header="Действия">
-            <MenuItem x:Name="CreateMasMenu"  Header="Создать" Click="CreateMas_Click"/>
-            <MenuItem x:Name="FillMenu" Header="Заполнить" Click="Fill_Click"/>
-            <MenuItem x:Name="FindMenu"  Header="Вычислить" Click="Find_Click" IsEnabled="False"/>
-            <MenuItem x:Name="ClearTableMenu" Header="Очистить таблицу" Click="ClearTable_Click"/>
+                <MenuItem x:Name="CreateMasMenu"  Header="Создать" Click="CreateMas_Click"/>
+                <MenuItem x:Name="FillMenu" Header="Заполнить" Click="Fill_Click"/>
+                <MenuItem x:Name="FindMenu"  Header="Вычислить" Click="Find_Click" IsEnabled="False"/>
+                <MenuItem x:Name="ClearTableMenu" Header="Очистить таблицу" Click="ClearTable_Click"/>
             </MenuItem>
             <MenuItem x:Name="SupportMenu" Header="Справка" Click="Support_Click"/>
             <MenuItem x:Name="AboutProgramMenu" Header="О программе" Click="AboutProgram_Click"/>
         </Menu>
-        <ToolBar VerticalAlignment="Top" Height="34" Grid.Row="1">
+        <ToolBar VerticalAlignment="Top" Height="34" Grid.Row="1" Grid.ColumnSpan="2">
             <Button ToolTip="Открытие таблицы (Загрузка из файла)" Click="Open_Click">
                 <Image Source="icons/LoadFrom.ico"/>
             </Button>
@@ -67,7 +71,7 @@
                 <Image Source="icons/Exit.ico"/>
             </Button>
         </ToolBar>
-        <GroupBox Header="Таблица" HorizontalAlignment="Left" Height="284" Margin="10,10,0,0" VerticalAlignment="Top" Width="393" Grid.Row="2">
+        <GroupBox Header="Таблица" HorizontalAlignment="Left" Height="284" Margin="19,10,0,0" VerticalAlignment="Top" Width="393" Grid.Row="4">
             <Grid>
                 <GroupBox Header="Создание скелета таблицы" HorizontalAlignment="Left" Height="119" Margin="0,10,0,0" VerticalAlignment="Top" Width="211" Grid.ColumnSpan="2">
                     <Grid>
@@ -97,23 +101,14 @@
                 </GroupBox>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Результаты" HorizontalAlignment="Left" Height="125" Margin="412,7,0,0" VerticalAlignment="Top" Width="346" Grid.Row="3">
+        <GroupBox Header="Дополнительные функции программы" HorizontalAlignment="Left" Height="125" Margin="417,10,0,0" VerticalAlignment="Top" Width="236" Grid.Row="4" Grid.ColumnSpan="2">
             <Grid>
-                <Label Content="Количество чисел:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="CountNumbers" HorizontalAlignment="Left" Height="23" Margin="189,13,0,0" VerticalAlignment="Top" Width="129" IsReadOnly="True"/>
-                <Button x:Name="Find" Content="Вычислить" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top" Width="308" Click="Find_Click" IsEnabled="False"/>
-                <Label Content="Среднее значение по столбцу:" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="AvgOnColumn" HorizontalAlignment="Left" Height="23" Margin="189,41,0,0" VerticalAlignment="Top" Width="129" IsReadOnly="True"/>
+                <Button x:Name="Support" Content="Справка" HorizontalAlignment="Left" Margin="10,17,0,0" VerticalAlignment="Top" Width="204" Click="Support_Click"/>
+                <Button x:Name="AboutProgram" Content="О программе" HorizontalAlignment="Left" Margin="10,42,0,0" VerticalAlignment="Top" Width="204" Click="AboutProgram_Click" Height="22"/>
+                <Button x:Name="Exit" Content="Выход" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" Width="204" Click="Exit_Click" IsCancel="True" Height="20"/>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Дополнительные функции программы" HorizontalAlignment="Left" Height="122" Margin="84,10,0,0" VerticalAlignment="Top" Width="246" Grid.Row="3">
-            <Grid>
-                <Button x:Name="Support" Content="Справка" HorizontalAlignment="Left" Margin="10,17,0,0" VerticalAlignment="Top" Width="214" Click="Support_Click"/>
-                <Button x:Name="AboutProgram" Content="О программе" HorizontalAlignment="Left" Margin="10,42,0,0" VerticalAlignment="Top" Width="214" Click="AboutProgram_Click" Height="22"/>
-                <Button x:Name="Exit" Content="Выход" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" Width="214" Click="Exit_Click" IsCancel="True" Height="20"/>
-            </Grid>
-        </GroupBox>
-        <DataGrid x:Name="VisualTable" Margin="412,10,10,10" CellEditEnding="VisualTable_CellEditEnding" Grid.Row="2" PreviewTextInput="VisualTable_PreviewTextInput">
+        <DataGrid x:Name="VisualTable" Margin="10" CellEditEnding="VisualTable_CellEditEnding" Grid.Row="2" PreviewTextInput="VisualTable_PreviewTextInput" Grid.RowSpan="2">
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem x:Name="AddColumnContextMenu" Header="Добавить столбец" IsEnabled="False" Click="AddColumn_Click"/>
@@ -123,5 +118,16 @@
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>
+        <GroupBox Header="Среднее арифметическое столбцов" Height="119" Margin="6,10,1,0" Grid.Row="2" MinWidth="490" Grid.Column="1">
+            <Grid>
+                <DataGrid x:Name="AvgOfColumns" CellEditEnding="VisualTable_CellEditEnding" PreviewTextInput="VisualTable_PreviewTextInput"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Количество элементов столбца, которые больше среднего арифметического" Height="119" Margin="6,10,1,14" Grid.Row="3" MinWidth="505" Grid.Column="1">
+            <Grid>
+                <DataGrid x:Name="CountMoreAvgOfColumns" CellEditEnding="VisualTable_CellEditEnding" PreviewTextInput="VisualTable_PreviewTextInput"/>
+            </Grid>
+        </GroupBox>
+        <Button x:Name="Find" Content="Вычислить" Grid.Column="1" HorizontalAlignment="Left" Margin="235,52,0,0" Grid.Row="4" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
     </Grid>
 </Window>

@@ -141,7 +141,7 @@ namespace PW13
 
         private void Find_Click(object sender, RoutedEventArgs e)
         {            
-            CountNumbers.Text = Convert.ToString("");//Вывод ответа в строку после обращения к функции
+            
         }//с указанными данными массива(параметр)
 
         private void CountColumns_GotFocus(object sender, RoutedEventArgs e)
@@ -226,6 +226,7 @@ namespace PW13
                 FindMenu.IsEnabled = true;
                 FillOfRandom.IsEnabled = true;
                 ClearTable.IsEnabled = true;
+                ClearTableMenu.IsEnabled = true;
             }
             else
             {
@@ -238,12 +239,12 @@ namespace PW13
                 FindMenu.IsEnabled = false;
                 FillOfRandom.IsEnabled = false;
                 ClearTable.IsEnabled = false;
+                ClearTableMenu.IsEnabled = false;
             }
         }
         private void ClearResults()
         {
-            CountNumbers.Clear();
-            AvgOnColumn.Clear();
+            
         }
     }
 }
