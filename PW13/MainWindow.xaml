@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PW13"
         mc:Ignorable="d"
-        Title="Таблица Элементов" Height="697" Width="1022" ResizeMode="CanResize" Icon="icons/LogoIco.ico" KeyDown="MainWin_KeyDown">
+        Title="Таблица Элементов" Height="697" Width="1039" ResizeMode="CanResize" Icon="icons/LogoIco.ico" KeyDown="MainWin_KeyDown" WindowStartupLocation="CenterScreen" MinHeight="697" MinWidth="1039">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="251*"/>
@@ -108,24 +108,28 @@
                 <Button x:Name="Exit" Content="Выход" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" Width="204" Click="Exit_Click" IsCancel="True" Height="20"/>
             </Grid>
         </GroupBox>
-        <DataGrid x:Name="VisualTable" Margin="10" CellEditEnding="VisualTable_CellEditEnding" Grid.Row="2" PreviewTextInput="VisualTable_PreviewTextInput" Grid.RowSpan="2">
-            <DataGrid.ContextMenu>
-                <ContextMenu>
-                    <MenuItem x:Name="AddColumnContextMenu" Header="Добавить столбец" IsEnabled="False" Click="AddColumn_Click"/>
-                    <MenuItem x:Name="DeleteColumnContextMenu" Header="Удалить столбец" IsEnabled="False" Click="DeleteColumn_Click"/>
-                    <MenuItem x:Name="AddRowContextMenu" Header="Добавить строку" IsEnabled="False" Click="AddRow_Click"/>
-                    <MenuItem x:Name="DeleteRowContextMenu" Header="Удалить строку" IsEnabled="False" Click="DeleteRow_Click"/>
-                </ContextMenu>
-            </DataGrid.ContextMenu>
-        </DataGrid>
-        <GroupBox Header="Среднее арифметическое столбцов" Height="119" Margin="6,10,1,0" Grid.Row="2" MinWidth="490" Grid.Column="1">
+        <GroupBox Header="Исходные данные" Grid.Row="2" Margin="10,10,10,14" Grid.RowSpan="2">
             <Grid>
-                <DataGrid x:Name="AvgOfColumns" CellEditEnding="VisualTable_CellEditEnding" PreviewTextInput="VisualTable_PreviewTextInput"/>
+                <DataGrid x:Name="VisualTable" CellEditEnding="VisualTable_CellEditEnding" PreviewTextInput="VisualTable_PreviewTextInput">
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem x:Name="AddColumnContextMenu" Header="Добавить столбец" IsEnabled="False" Click="AddColumn_Click"/>
+                            <MenuItem x:Name="DeleteColumnContextMenu" Header="Удалить столбец" IsEnabled="False" Click="DeleteColumn_Click"/>
+                            <MenuItem x:Name="AddRowContextMenu" Header="Добавить строку" IsEnabled="False" Click="AddRow_Click"/>
+                            <MenuItem x:Name="DeleteRowContextMenu" Header="Удалить строку" IsEnabled="False" Click="DeleteRow_Click"/>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                </DataGrid>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Количество элементов столбца, которые больше среднего арифметического" Height="119" Margin="6,10,1,14" Grid.Row="3" MinWidth="505" Grid.Column="1">
+        <GroupBox Header="Среднее арифметическое столбцов" Height="119" Margin="10,10,10,0" Grid.Row="2" MinWidth="490" Grid.Column="1">
             <Grid>
-                <DataGrid x:Name="CountMoreAvgOfColumns" CellEditEnding="VisualTable_CellEditEnding" PreviewTextInput="VisualTable_PreviewTextInput"/>
+                <DataGrid x:Name="AvgOfColumns" CellEditEnding="VisualTable_CellEditEnding" PreviewTextInput="VisualTable_PreviewTextInput" CanUserAddRows="False" CanUserDeleteRows="False"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Количество элементов столбца, которые больше среднего арифметического" Height="119" Margin="10,10,10,14" Grid.Row="3" MinWidth="490" Grid.Column="1">
+            <Grid>
+                <DataGrid x:Name="CountMoreAvgOfColumns" CellEditEnding="VisualTable_CellEditEnding" PreviewTextInput="VisualTable_PreviewTextInput" CanUserAddRows="False" CanUserDeleteRows="False"/>
             </Grid>
         </GroupBox>
         <Button x:Name="Find" Content="Вычислить" Grid.Column="1" HorizontalAlignment="Left" Margin="235,52,0,0" Grid.Row="4" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
