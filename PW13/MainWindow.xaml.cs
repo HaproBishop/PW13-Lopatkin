@@ -76,6 +76,7 @@ namespace PW13
         {
             VisualTable.ItemsSource = WorkMas.ClearTable(); //Обращение к функции "очистки" массива и возвращение null для DataGrid(Очистка таблицы)
             VisualArray.ClearUndoAndCancelUndo();
+            DynamicActionsOnOrOff(e);
             Result.Clear();
             Find.IsEnabled = false;
             Find_Menu.IsEnabled = false;
@@ -90,6 +91,7 @@ namespace PW13
             {
                 WorkMas.CreateMas(in rows, in columns);                
                 VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas._dmas).DefaultView;
+                DynamicActionsOnOrOff(e);
                 Find.IsEnabled = true;
                 Find_Menu.IsEnabled = true;
             }           
@@ -209,7 +211,25 @@ namespace PW13
                 VisualTable.ItemsSource = VisualArray.DeleteRow(Convert.ToInt32(VisualTable.SelectedIndex)).DefaultView;
             }
         }
-
+        private void DynamicActionsOnOrOff(RoutedEventArgs e)
+        {
+            if (e.Source == CreateMas)
+            {
+                DynamicActions.IsEnabled = true;
+                AddColumnContextMenu.IsEnabled = true;
+                AddRowContextMenu.IsEnabled = true;
+                DeleteColumnContextMenu.IsEnabled = true;
+                DeleteRowContextMenu.IsEnabled = true;
+            }
+            else
+            {
+                DynamicActions.IsEnabled = false;
+                AddColumnContextMenu.IsEnabled = false;
+                AddRowContextMenu.IsEnabled = false;
+                DeleteColumnContextMenu.IsEnabled = false;
+                DeleteRowContextMenu.IsEnabled = false;
+            }
+        }
         private void VisualTable_SourceUpdated(object sender, DataTransferEventArgs e)
         {       
             

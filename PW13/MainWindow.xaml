@@ -122,11 +122,10 @@
         <DataGrid x:Name="VisualTable" Margin="412,10,10,10" CellEditEnding="VisualTable_CellEditEnding" Grid.Row="2" PreviewTextInput="VisualTable_PreviewTextInput" SourceUpdated="VisualTable_SourceUpdated">
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Добавить столбец" Click="AddColumn_Click"/>
-                    <MenuItem Header="Удалить столбец" Click="DeleteColumn_Click"/>
-                    <MenuItem Header="Добавить строку" Click="AddRow_Click"/>
-                    <MenuItem Header="Удалить строку" Click="DeleteRow_Click"/>
-                    <MenuItem Header="Очистить таблицу" Click="ClearTable_Click"/>
+                    <MenuItem x:Name="AddColumnContextMenu" Header="Добавить столбец" IsEnabled="False" Click="AddColumn_Click"/>
+                    <MenuItem x:Name="DeleteColumnContextMenu" Header="Удалить столбец" IsEnabled="False" Click="DeleteColumn_Click"/>
+                    <MenuItem x:Name="AddRowContextMenu" Header="Добавить строку" IsEnabled="False" Click="AddRow_Click"/>
+                    <MenuItem x:Name="DeleteRowContextMenu" Header="Удалить строку" IsEnabled="False" Click="DeleteRow_Click"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>
