@@ -84,7 +84,8 @@ namespace PW13
             bool prv_rows = int.TryParse(CountRows.Text, out int rows);
             if (prv_columns == true && prv_rows == true)
             {
-                WorkMas.CreateMas(in rows, in columns);                
+                WorkMas.CreateMas(in rows, in columns);
+                VisualArray.ClearUndoAndCancelUndo();
                 VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas._dmas).DefaultView;
                 DynamicActionsOnOrOff(e);                
             }           
@@ -133,7 +134,14 @@ namespace PW13
                 WorkMas._dmas[iRow, iColumn] = value;
                 VisualArray.ReserveTable(WorkMas._dmas);
             }
-            if (e.EditAction == DataGridEditAction.Cancel) VisualTable.SelectedItem = cell;            
+            else 
+            {
+                VisualTable.SelectedItem = cell;
+            }
+            if (e.EditAction == DataGridEditAction.Cancel)
+            {
+                VisualTable.SelectedItem = cell;
+            }
         }
 
         private void CountColumns_GotFocus(object sender, RoutedEventArgs e)

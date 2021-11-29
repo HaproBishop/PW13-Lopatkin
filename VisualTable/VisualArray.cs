@@ -247,6 +247,7 @@ namespace VisualTable
         {
             _cancelledchanges = new Stack<int[,]>();
             _reservedtable = new Stack<int[,]>();
+            _wascancel = false;
         }
     }
 }
