@@ -161,7 +161,8 @@ namespace PW13
             }
             if (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.Z) 
             {
-                VisualTable.ItemsSource = VisualArray.CancelChanges().DefaultView;                
+                VisualTable.ItemsSource = VisualArray.CancelChanges().DefaultView;
+                WorkMas._dmas = VisualArray.SyncData();
             }
             
             if (((e.KeyboardDevice.Modifiers & (ModifierKeys.Control | ModifierKeys.Shift)) == 
@@ -169,6 +170,7 @@ namespace PW13
                 (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.Y))              
             {
                 VisualTable.ItemsSource = VisualArray.CancelUndo().DefaultView;
+                WorkMas._dmas = VisualArray.SyncData();
             }
         }
 
