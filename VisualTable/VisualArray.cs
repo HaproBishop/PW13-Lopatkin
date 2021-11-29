@@ -21,6 +21,7 @@ namespace VisualTable
         private static Stack<int[,]> _cancelledchanges = new Stack<int[,]>();//Стек массивов с отмененными изменениями
         private static bool _needreserve = true;//Используется для свойства NeedReserve
         private static bool _firstcelleditending = true;//Значение для FirstCellEditEnding
+        private static bool _wascancel;        
         /// <summary>
         /// Используется в случаях, когда при обновлении таблицы не нужно резервировать данные для последующего
         /// ее восстановления. Нужно false для изменения значений ячеек
@@ -204,8 +205,13 @@ namespace VisualTable
         /// </summary>
         /// <param name="dmas"></param>
         public static void ReserveTable(int[,] dmas)
-        {            
-             _reservedtable.Push((int[,])dmas.Clone());
+        {
+            if (_wascancel)
+            {
+                _cancelledchanges = new Stack<int[,]>();
+                _wascancel = false;
+            }
+            _reservedtable.Push((int[,])dmas.Clone());
 
         }/// <summary>
          /// Отмена изменений таблицы
@@ -215,16 +221,10 @@ namespace VisualTable
         {
             if (_reservedtable.Count > 1)
             {                
-                _cancelledchanges.Push((int[,])_reservedtable.Pop().Clone());
-                try
-                {
-                    _needreserve = false;
-                    return ToDataTable(_reservedtable.Peek());
-                }
-                catch
-                {
-                    return _res;
-                }
+                _cancelledchanges.Push(_reservedtable.Pop());
+                _needreserve = false;
+                _wascancel = true;
+                return ToDataTable(_reservedtable.Peek());
             }
             return _res;
         }
@@ -235,7 +235,10 @@ namespace VisualTable
         public static DataTable CancelUndo()
         {
             if (_cancelledchanges.Count > 0)
-            {                                
+            {                                 
+                if(_cancelledchanges.Count == 1) _wascancel = false;
+                _needreserve = false;
+                _reservedtable.Push(_cancelledchanges.Peek());
                 return ToDataTable(_cancelledchanges.Pop());
             }
             return _res;
