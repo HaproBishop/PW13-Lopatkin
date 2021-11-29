@@ -163,10 +163,6 @@ namespace PW13
             if (e.KeyboardDevice.Modifiers == ModifierKeys.Alt && e.Key == Key.F4) Exit_Click(sender, e);
             if (e.Key == Key.F1) Support_Click(sender, e);
             if (e.Key == Key.F12) AboutProgram_Click(sender, e);
-            if (e.Key == Key.Delete && VisualTable.SelectedIndex != -1)
-            {
-                VisualArray.ReserveTable(WorkMas._dmas);                
-            }
             if (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.Z) 
             {
                 VisualTable.ItemsSource = VisualArray.CancelChanges().DefaultView;
