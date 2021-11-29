@@ -71,7 +71,7 @@
                 <Image Source="icons/Exit.ico"/>
             </Button>
         </ToolBar>
-        <GroupBox Header="Таблица" HorizontalAlignment="Left" Height="284" Margin="19,10,0,0" VerticalAlignment="Top" Width="393" Grid.Row="4">
+        <GroupBox Header="Таблица" HorizontalAlignment="Left" Height="309" Margin="10,0,0,27" VerticalAlignment="Bottom" Width="393" Grid.Row="4">
             <Grid>
                 <GroupBox Header="Создание скелета таблицы" HorizontalAlignment="Left" Height="119" Margin="0,10,0,0" VerticalAlignment="Top" Width="211" Grid.ColumnSpan="2">
                     <Grid>
@@ -89,7 +89,7 @@
                         <Button x:Name="Fill" Content="Заполнить" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="180" Click="Fill_Click" Focusable="False"/>
                     </Grid>
                 </GroupBox>
-                <Button x:Name="ClearTable" Content="Очистить таблицу" HorizontalAlignment="Left" Margin="0,231,0,0" VerticalAlignment="Top" Width="371" Click="ClearTable_Click" Grid.ColumnSpan="2" IsEnabled="False"/>
+                <Button x:Name="ClearTable" Content="Очистить таблицу" HorizontalAlignment="Left" Margin="10,231,0,0" VerticalAlignment="Top" Width="361" Click="ClearTable_Click" IsEnabled="False"/>
                 <GroupBox x:Name="DynamicActions" Header="Динамические действия" HorizontalAlignment="Left" Height="213" Margin="216,10,0,0" VerticalAlignment="Top" Width="165" IsEnabled="False">
                     <Grid>
                         <Button x:Name="AddColumn" Content="Добавить столбец" HorizontalAlignment="Left" VerticalAlignment="Top" Width="133" Click="AddColumn_Click" Focusable="False" Margin="10,12,0,0" Height="29"/>
@@ -99,9 +99,10 @@
                         <Button x:Name="DeleteRow" Content="Удалить строку" HorizontalAlignment="Left" VerticalAlignment="Top" Width="133" Click="DeleteRow_Click" Focusable="False" Margin="10,152,0,0" Height="28"/>
                     </Grid>
                 </GroupBox>
+                <Button x:Name="Find" Content="Вычислить" HorizontalAlignment="Left" Margin="10,256,0,0" VerticalAlignment="Top" Width="361" IsEnabled="False" Click="Find_Click"/>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Дополнительные функции программы" HorizontalAlignment="Left" Height="125" Margin="417,10,0,0" VerticalAlignment="Top" Width="236" Grid.Row="4" Grid.ColumnSpan="2">
+        <GroupBox Header="Дополнительные функции программы" HorizontalAlignment="Right" Height="125" Margin="0,0,10,27" VerticalAlignment="Bottom" Width="236" Grid.Row="4" Grid.Column="1">
             <Grid>
                 <Button x:Name="Support" Content="Справка" HorizontalAlignment="Left" Margin="10,17,0,0" VerticalAlignment="Top" Width="204" Click="Support_Click"/>
                 <Button x:Name="AboutProgram" Content="О программе" HorizontalAlignment="Left" Margin="10,42,0,0" VerticalAlignment="Top" Width="204" Click="AboutProgram_Click" Height="22"/>
@@ -122,16 +123,24 @@
                 </DataGrid>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Среднее арифметическое столбцов" Height="119" Margin="10,10,10,0" Grid.Row="2" MinWidth="490" Grid.Column="1">
+
+        <GroupBox Header="Результат" Grid.Row="2" Grid.Column="1" Margin="10,10,1,14" Grid.RowSpan="2">
             <Grid>
-                <DataGrid x:Name="AvgOfColumns" CellEditEnding="VisualTable_CellEditEnding" PreviewTextInput="VisualTable_PreviewTextInput" CanUserAddRows="False" CanUserDeleteRows="False"/>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="116*"/>
+                    <RowDefinition Height="109*"/>
+                </Grid.RowDefinitions>
+                <GroupBox Header="Среднее арифметическое столбцов" Margin="0,0,0,10" MinWidth="480">
+                    <Grid>
+                        <DataGrid x:Name="AvgOfColumns" CellEditEnding="VisualTable_CellEditEnding" PreviewTextInput="VisualTable_PreviewTextInput" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Количество элементов столбца, которые больше среднего арифметического" Margin="0,3,0,0" MinWidth="480" Grid.Row="1">
+                    <Grid>
+                        <DataGrid x:Name="CountMoreAvgOfColumns" CellEditEnding="VisualTable_CellEditEnding" PreviewTextInput="VisualTable_PreviewTextInput" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"/>
+                    </Grid>
+                </GroupBox>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Количество элементов столбца, которые больше среднего арифметического" Height="119" Margin="10,10,10,14" Grid.Row="3" MinWidth="490" Grid.Column="1">
-            <Grid>
-                <DataGrid x:Name="CountMoreAvgOfColumns" CellEditEnding="VisualTable_CellEditEnding" PreviewTextInput="VisualTable_PreviewTextInput" CanUserAddRows="False" CanUserDeleteRows="False"/>
-            </Grid>
-        </GroupBox>
-        <Button x:Name="Find" Content="Вычислить" Grid.Column="1" HorizontalAlignment="Left" Margin="235,52,0,0" Grid.Row="4" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
     </Grid>
 </Window>

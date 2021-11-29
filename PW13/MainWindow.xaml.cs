@@ -16,7 +16,7 @@ using System.IO;
 using Microsoft.Win32;
 using LibMas;
 using VisualTable;
-
+using FindCountMoreAvgColumnLibrary;
 //Практическая работа №13. Лопаткин Сергей ИСП-31
 //Задание №8. Дана матрица размера M * N. В каждом ее столбце найти количество элементов, 
 //больших среднего арифметического всех элементов этого столбца
@@ -139,11 +139,6 @@ namespace PW13
             if (e.EditAction == DataGridEditAction.Cancel) VisualTable.SelectedItem = cell;            
         }
 
-        private void Find_Click(object sender, RoutedEventArgs e)
-        {            
-            
-        }//с указанными данными массива(параметр)
-
         private void CountColumns_GotFocus(object sender, RoutedEventArgs e)
         {
             CreateMas.IsDefault = true;
@@ -169,8 +164,7 @@ namespace PW13
             }
             if (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.Z) 
             {
-                VisualTable.ItemsSource = VisualArray.CancelChanges().DefaultView;
-                
+                VisualTable.ItemsSource = VisualArray.CancelChanges().DefaultView;                
             }
             
             if (((e.KeyboardDevice.Modifiers & (ModifierKeys.Control | ModifierKeys.Shift)) == 
@@ -187,11 +181,13 @@ namespace PW13
         }
         private void AddColumn_Click(object sender, RoutedEventArgs e)
         {
+            ClearResults();
             VisualArray.ReserveTable(WorkMas._dmas = VisualArray.SyncData());
             VisualTable.ItemsSource = VisualArray.AddNewColumn().DefaultView;            
         }
         private void AddRow_Click(object sender, RoutedEventArgs e)
         {
+            ClearResults();
             VisualArray.ReserveTable(WorkMas._dmas = VisualArray.SyncData());
             VisualTable.ItemsSource = VisualArray.AddNewRow().DefaultView;            
         }
@@ -199,6 +195,7 @@ namespace PW13
         {
             if (VisualTable.CurrentCell.Column.DisplayIndex != -1)
             {
+                ClearResults();
                 VisualArray.ReserveTable(WorkMas._dmas = VisualArray.SyncData());
                 VisualTable.ItemsSource = VisualArray.DeleteColumn(Convert.ToInt32(VisualTable.CurrentCell.Column.DisplayIndex)).DefaultView;
             }
@@ -208,6 +205,7 @@ namespace PW13
         {
             if (VisualTable.SelectedIndex != -1)
             {
+                ClearResults();
                 VisualArray.ReserveTable(WorkMas._dmas = VisualArray.SyncData());
                 VisualTable.ItemsSource = VisualArray.DeleteRow(Convert.ToInt32(VisualTable.SelectedIndex)).DefaultView;
             }
@@ -244,7 +242,17 @@ namespace PW13
         }
         private void ClearResults()
         {
-            
+            AvgOfColumns.ItemsSource = null;
+            CountMoreAvgOfColumns.ItemsSource = null;
+        }
+
+        private void Find_Click(object sender, RoutedEventArgs e)
+        {
+            WorkMas._dmas = VisualArray.SyncData();
+            VisualArray.ClearUndoAndCancelUndo();
+            int [][] result = FindCountMoreAvgColumnClass.FindCountMoreAvgColumn(WorkMas._dmas);
+            AvgOfColumns.ItemsSource = VisualArray.ToDataTable(result[0]).DefaultView;
+            CountMoreAvgOfColumns.ItemsSource = VisualArray.ToDataTable(result[1]).DefaultView;
         }
     }
 }

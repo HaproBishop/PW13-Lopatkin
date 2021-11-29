@@ -98,6 +98,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FindCountMoreAvgColumnLibrary\FindCountMoreAvgColumnLibrary.csproj">
+      <Project>{618329e1-29bc-4c03-b124-5ff25784c944}</Project>
+      <Name>FindCountMoreAvgColumnLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LibMas\LibMas.csproj">
       <Project>{7104ac57-16d8-42b8-9b51-46156f30049e}</Project>
       <Name>LibMas</Name>

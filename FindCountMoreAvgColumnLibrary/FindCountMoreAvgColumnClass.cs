@@ -15,9 +15,13 @@ namespace FindCountMoreAvgColumnLibrary
      /// <param name="dmas">Входной массив с хранящимися в нем данными</param>
      /// <returns>Возращает массив, где первая строка - среднее значение по каждому стоблцу, а вторая - количество 
      /// значений каждого столбца, которые больше его среднего арифметического</returns>
-        public int[,] FindCountMoreAvgColumn(int [,] dmas)
+        public static int[][] FindCountMoreAvgColumn(int [,] dmas)
         {
-            int[,] resultarray = new int[2, dmas.GetLength(1)];
+            int[][] resultarray = new int[2][];
+            for (int i = 0; i < 2; i++)
+            {
+                resultarray[i] = new int[dmas.GetLength(1)];
+            }
             for (int j = 0; j < dmas.GetLength(1); j++)
             {
                 int sum = 0;
@@ -25,16 +29,16 @@ namespace FindCountMoreAvgColumnLibrary
             {
                     sum += dmas[i, j];
             }
-                resultarray[0, j] = sum / dmas.GetLength(0);             
+                resultarray[0][j] = sum / dmas.GetLength(0);             
             }
             for (int j = 0; j < dmas.GetLength(1); j++)
             {
                 int count = 0;
             for (int i = 0; i < dmas.GetLength(0); i++)
             {
-                    if (resultarray[0, j] < dmas[i, j]) count++;
+                    if (resultarray[0][j] < dmas[i, j]) count++;
             }
-                resultarray[1, j] = count;
+                resultarray[1][j] = count;
             }
             return resultarray;
         }

@@ -41,6 +41,21 @@ namespace VisualTable
         public static bool FirstCellEditEnding { get => _firstcelleditending; set => _firstcelleditending = value; }
         public static Stack<int[,]> ReservedTable { get => _reservedtable; }
         public static Stack<int[,]> CancelledChanges { get => _cancelledchanges; }
+        public static DataTable ToDataTable(int[] matrix)
+        {
+            DataTable result = new DataTable();
+            for (int i = 0; i < matrix.Length; i++)
+            {
+                result.Columns.Add("Column" + (i + 1), typeof(string));
+            }
+                DataRow row = result.NewRow();
+                for (int i = 0; i < matrix.Length; i++)
+                {
+                    row[i] = matrix[i];
+                }
+                result.Rows.Add(row);            
+            return result;
+        }
         //Метод для заполнения таблицы значениями двумерного массива
         public static DataTable ToDataTable(int[,] matrix)
         {            
