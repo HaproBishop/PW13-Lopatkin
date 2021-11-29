@@ -252,9 +252,12 @@ namespace PW13
                 DeleteRowContextMenu.IsEnabled = true;                
                 Find.IsEnabled = true;
                 FindMenu.IsEnabled = true;
-                FillOfRandom.IsEnabled = true;
+                Fill.IsEnabled = true;
+                FillMenu.IsEnabled = true;
+                FillToolBar.IsEnabled = true;
                 ClearTable.IsEnabled = true;
                 ClearTableMenu.IsEnabled = true;
+                ClearTableToolBar.IsEnabled = true;
             }
             else
             {
@@ -265,9 +268,12 @@ namespace PW13
                 DeleteRowContextMenu.IsEnabled = false;                
                 Find.IsEnabled = false;
                 FindMenu.IsEnabled = false;
-                FillOfRandom.IsEnabled = false;
+                Fill.IsEnabled = false;
+                FillMenu.IsEnabled = false;
+                FillToolBar.IsEnabled = false;
                 ClearTable.IsEnabled = false;
                 ClearTableMenu.IsEnabled = false;
+                ClearTableToolBar.IsEnabled = false;
             }
         }
         private void ClearResults()
