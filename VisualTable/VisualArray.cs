@@ -82,7 +82,7 @@ namespace VisualTable
         /// Добавление новой строки в таблицу
         /// </summary>
         /// <returns></returns>
-        public static DataTable AddNewRow()
+        public static DataTable AddNewRow(ref int [,] dmas)
         {
             DataRow row;
             row = _res.NewRow();
@@ -90,36 +90,27 @@ namespace VisualTable
             {
                 row[i] = 0;
             }
-            _res.Rows.Add(row);            
-            return _res;
-        }/// <summary>
-        /// Добавление строки посредством одномерного массива
-        /// </summary>
-        /// <param name="mas"></param>
-        /// <returns></returns>
-        public static DataTable AddNewRow(int[] mas)
-        {
-            _res.Rows.Add(mas);            
+            _res.Rows.Add(row);
+            ReserveTable(dmas = SyncData());            
             return _res;
         }/// <summary>
         /// Удаление строки из таблицы (динамически по индексу)
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public static DataTable DeleteRow(int index)
+        public static DataTable DeleteRow(ref int [,] dmas, int index)
         {
             DataRow row = _res.Rows[index];
-            _res.Rows.Remove(row);            
+            _res.Rows.Remove(row);
+            ReserveTable(dmas = SyncData());
             return _res;
         }/// <summary>
         /// Добавление столбца в таблицу
         /// </summary>
         /// <returns></returns>
-        public static DataTable AddNewColumn()
+        public static DataTable AddNewColumn(ref int [,] dmas)
         {            
-            int [,]dmas = SyncData();
-            dmas = AddNewColumnIntoMas(dmas);
-            _needreserve = false;
+            dmas = AddNewColumnIntoMas(dmas);            
             _res = ToDataTable(dmas);            
             return _res;
         }/// <summary>
@@ -127,11 +118,9 @@ namespace VisualTable
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public static DataTable DeleteColumn(int index)
-        {
-            int[,] dmas = SyncData();
-            dmas = DeleteColumnIntoMas(dmas, index);
-            _needreserve = false;
+        public static DataTable DeleteColumn(ref int[,] dmas, int index)
+        {            
+            dmas = DeleteColumnIntoMas(dmas, index);            
             _res = ToDataTable(dmas);
             return _res;
         }
@@ -216,7 +205,7 @@ namespace VisualTable
         /// <param name="dmas"></param>
         public static void ReserveTable(int[,] dmas)
         {            
-             _reservedtable.Push(dmas);
+             _reservedtable.Push((int[,])dmas.Clone());
 
         }/// <summary>
          /// Отмена изменений таблицы
@@ -224,14 +213,13 @@ namespace VisualTable
          /// <returns></returns>
         public static DataTable CancelChanges()
         {
-            if (_reservedtable.Count > 0)
-            {
-                ReserveTable(SyncData());
-                _cancelledchanges.Push(_reservedtable.Pop());
+            if (_reservedtable.Count > 1)
+            {                
+                _cancelledchanges.Push((int[,])_reservedtable.Pop().Clone());
                 try
                 {
                     _needreserve = false;
-                    return ToDataTable(_reservedtable.Pop());
+                    return ToDataTable(_reservedtable.Peek());
                 }
                 catch
                 {
@@ -247,9 +235,7 @@ namespace VisualTable
         public static DataTable CancelUndo()
         {
             if (_cancelledchanges.Count > 0)
-            {
-                ReserveTable(SyncData());
-                _needreserve = false;
+            {                                
                 return ToDataTable(_cancelledchanges.Pop());
             }
             return _res;

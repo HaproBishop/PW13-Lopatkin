@@ -32,8 +32,7 @@ namespace PW13
             InitializeComponent();
         }        
         private void Open_Click(object sender, RoutedEventArgs e)
-        {
-            WorkMas._dmas = VisualArray.SyncData();
+        {            
             OpenFileDialog openfile = new OpenFileDialog
             {
                 Title = "Открытие таблицы",
@@ -53,8 +52,7 @@ namespace PW13
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
-        {
-            WorkMas._dmas = VisualArray.SyncData();
+        {            
             SaveFileDialog savefile = new SaveFileDialog
             {
                 Title = "Сохранение таблицы",
@@ -110,8 +108,6 @@ namespace PW13
             bool prv_range = int.TryParse(Range.Text, out int range);
             if (prv_range == true && WorkMas._dmas != null) //2-ое условие - проверка на заполнение без скелета
             {                
-                WorkMas._dmas = VisualArray.SyncData();
-                VisualArray.NeedReserve = false;
                 WorkMas.FillDMas(in range);//Обращение с передачей информации об диапазоне
                 VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas._dmas).DefaultView; //Отображение таблицы с заполненными значениями
             }
@@ -128,13 +124,14 @@ namespace PW13
 
         private void VisualTable_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {                                 
-            object cell = VisualTable.SelectedItem;          
+            object cell = VisualTable.SelectedItem;
+            int iRow = e.Row.GetIndex();
+            int iColumn = e.Column.DisplayIndex;
             bool tryedit = int.TryParse(((TextBox)e.EditingElement).Text, out int value);
             if (tryedit)
             {
-                if(!VisualArray.FirstCellEditEnding)
-                VisualArray.ReserveTable(WorkMas._dmas = VisualArray.SyncData());
-                VisualArray.FirstCellEditEnding = false;
+                WorkMas._dmas[iRow, iColumn] = value;
+                VisualArray.ReserveTable(WorkMas._dmas);
             }
             if (e.EditAction == DataGridEditAction.Cancel) VisualTable.SelectedItem = cell;            
         }
@@ -160,7 +157,7 @@ namespace PW13
             if (e.Key == Key.F12) AboutProgram_Click(sender, e);
             if (e.Key == Key.Delete && VisualTable.SelectedIndex != -1)
             {
-                VisualArray.ReserveTable(WorkMas._dmas = VisualArray.SyncData());                
+                VisualArray.ReserveTable(WorkMas._dmas);                
             }
             if (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.Z) 
             {
@@ -181,23 +178,20 @@ namespace PW13
         }
         private void AddColumn_Click(object sender, RoutedEventArgs e)
         {
-            ClearResults();
-            VisualArray.ReserveTable(WorkMas._dmas = VisualArray.SyncData());
-            VisualTable.ItemsSource = VisualArray.AddNewColumn().DefaultView;            
+            ClearResults();            
+            VisualTable.ItemsSource = VisualArray.AddNewColumn(ref WorkMas._dmas).DefaultView;            
         }
         private void AddRow_Click(object sender, RoutedEventArgs e)
         {
-            ClearResults();
-            VisualArray.ReserveTable(WorkMas._dmas = VisualArray.SyncData());
-            VisualTable.ItemsSource = VisualArray.AddNewRow().DefaultView;            
+            ClearResults();            
+            VisualTable.ItemsSource = VisualArray.AddNewRow(ref WorkMas._dmas).DefaultView;            
         }
         private void DeleteColumn_Click(object sender, RoutedEventArgs e)
         {
             if (VisualTable.CurrentCell.Column.DisplayIndex != -1)
             {
-                ClearResults();
-                VisualArray.ReserveTable(WorkMas._dmas = VisualArray.SyncData());
-                VisualTable.ItemsSource = VisualArray.DeleteColumn(Convert.ToInt32(VisualTable.CurrentCell.Column.DisplayIndex)).DefaultView;
+                ClearResults();                
+                VisualTable.ItemsSource = VisualArray.DeleteColumn(ref WorkMas._dmas, VisualTable.CurrentCell.Column.DisplayIndex).DefaultView;
             }
         }
 
@@ -205,9 +199,8 @@ namespace PW13
         {
             if (VisualTable.SelectedIndex != -1)
             {
-                ClearResults();
-                VisualArray.ReserveTable(WorkMas._dmas = VisualArray.SyncData());
-                VisualTable.ItemsSource = VisualArray.DeleteRow(Convert.ToInt32(VisualTable.SelectedIndex)).DefaultView;
+                ClearResults();                
+                VisualTable.ItemsSource = VisualArray.DeleteRow(ref WorkMas._dmas, VisualTable.SelectedIndex).DefaultView;
             }
         }
         private void DynamicActionsOnOrOff(RoutedEventArgs e)
@@ -247,8 +240,7 @@ namespace PW13
         }
 
         private void Find_Click(object sender, RoutedEventArgs e)
-        {
-            WorkMas._dmas = VisualArray.SyncData();
+        {            
             VisualArray.ClearUndoAndCancelUndo();
             int [][] result = FindCountMoreAvgColumnClass.FindCountMoreAvgColumn(WorkMas._dmas);
             AvgOfColumns.ItemsSource = VisualArray.ToDataTable(result[0]).DefaultView;

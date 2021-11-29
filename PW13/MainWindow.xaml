@@ -111,7 +111,7 @@
         </GroupBox>
         <GroupBox Header="Исходные данные" Grid.Row="2" Margin="10,10,10,14" Grid.RowSpan="2">
             <Grid>
-                <DataGrid x:Name="VisualTable" CellEditEnding="VisualTable_CellEditEnding" PreviewTextInput="VisualTable_PreviewTextInput">
+                <DataGrid x:Name="VisualTable" CellEditEnding="VisualTable_CellEditEnding" PreviewTextInput="VisualTable_PreviewTextInput" CanUserAddRows="False">
                     <DataGrid.ContextMenu>
                         <ContextMenu>
                             <MenuItem x:Name="AddColumnContextMenu" Header="Добавить столбец" IsEnabled="False" Click="AddColumn_Click"/>
