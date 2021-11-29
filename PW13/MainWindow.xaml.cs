@@ -17,6 +17,7 @@ using Microsoft.Win32;
 using LibMas;
 using VisualTable;
 using FindCountMoreAvgColumnLibrary;
+using System.Windows.Threading;
 //Практическая работа №13. Лопаткин Сергей ИСП-31
 //Задание №8. Дана матрица размера M * N. В каждом ее столбце найти количество элементов, 
 //больших среднего арифметического всех элементов этого столбца
@@ -30,7 +31,37 @@ namespace PW13
         public MainWindow()
         {
             InitializeComponent();
+            DispatcherTimer cell = new DispatcherTimer();
+            cell.Tick += Cell_Tick;
+            cell.Interval = new TimeSpan(0,0,0,0,200);
+            cell.IsEnabled = true;            
         }        
+        private void Cell_Tick(object sender, EventArgs e)
+        {
+            string _defaultcurrentcell = "Ячейка не выбрана";
+            if (WorkMas._dmas != null)
+            {
+                string _linelength = "";
+                if (VisualTable.SelectedItem == null) CurrentCell.Text = _defaultcurrentcell;
+                else CurrentCell.Text = (VisualTable.CurrentCell.Column.DisplayIndex + 1).ToString() + " столбец / " + (VisualTable.SelectedIndex + 1) + " строка";
+
+                if (WorkMas._dmas.GetLength(1) <= 4)
+                    _linelength = WorkMas._dmas.GetLength(1).ToString() + " столбца / ";
+                else
+                    TableLength.Text = WorkMas._dmas.GetLength(1).ToString() + " столбцов / ";
+                if (WorkMas._dmas.GetLength(0) <= 4)
+                    _linelength += WorkMas._dmas.GetLength(0).ToString() + " строки";
+                else
+                    _linelength += WorkMas._dmas.GetLength(0).ToString() + " строк";
+                TableLength.Text = _linelength;
+             }
+            else
+            {
+                CurrentCell.Text = _defaultcurrentcell;
+                TableLength.Text = "Таблица не создана";
+            }
+        }
+
         private void Open_Click(object sender, RoutedEventArgs e)
         {            
             OpenFileDialog openfile = new OpenFileDialog

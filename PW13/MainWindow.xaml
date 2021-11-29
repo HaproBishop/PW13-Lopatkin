@@ -16,9 +16,10 @@
             <RowDefinition Height="35"/>
             <RowDefinition Height="129*"/>
             <RowDefinition Height="143*"/>
-            <RowDefinition Height="342*"/>
+            <RowDefinition Height="314*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StatusBar VerticalAlignment="Bottom" Grid.Row="4" Height="22" HorizontalContentAlignment="Right" Grid.ColumnSpan="2">
+        <StatusBar VerticalAlignment="Bottom" Grid.Row="5" Height="22" HorizontalContentAlignment="Right" Grid.ColumnSpan="2">
             <TextBlock x:Name="CurrentCell"/>
             <Separator/>
             <TextBlock x:Name="TableLength"/>
@@ -71,7 +72,7 @@
                 <Image Source="icons/Exit.ico"/>
             </Button>
         </ToolBar>
-        <GroupBox Header="Таблица" HorizontalAlignment="Left" Height="309" Margin="10,0,0,27" VerticalAlignment="Bottom" Width="393" Grid.Row="4">
+        <GroupBox Header="Таблица" HorizontalAlignment="Left" Height="309" Margin="10,0,0,8" VerticalAlignment="Bottom" Width="393" Grid.Row="4">
             <Grid>
                 <GroupBox Header="Создание скелета таблицы" HorizontalAlignment="Left" Height="119" Margin="0,10,0,0" VerticalAlignment="Top" Width="211" Grid.ColumnSpan="2">
                     <Grid>
@@ -102,7 +103,7 @@
                 <Button x:Name="Find" Content="Вычислить" HorizontalAlignment="Left" Margin="10,256,0,0" VerticalAlignment="Top" Width="361" IsEnabled="False" Click="Find_Click"/>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Дополнительные функции программы" HorizontalAlignment="Right" Height="125" Margin="0,0,10,27" VerticalAlignment="Bottom" Width="236" Grid.Row="4" Grid.Column="1">
+        <GroupBox Header="Дополнительные функции программы" HorizontalAlignment="Right" Height="125" Margin="0,0,10,8" VerticalAlignment="Bottom" Width="236" Grid.Row="4" Grid.Column="1">
             <Grid>
                 <Button x:Name="Support" Content="Справка" HorizontalAlignment="Left" Margin="10,17,0,0" VerticalAlignment="Top" Width="204" Click="Support_Click"/>
                 <Button x:Name="AboutProgram" Content="О программе" HorizontalAlignment="Left" Margin="10,42,0,0" VerticalAlignment="Top" Width="204" Click="AboutProgram_Click" Height="22"/>
