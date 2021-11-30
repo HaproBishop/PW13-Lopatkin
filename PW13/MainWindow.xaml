@@ -651,13 +651,13 @@
             <MenuItem x:Name="AboutProgramMenu" Header="О программе" Click="AboutProgram_Click" Background="#FFB052FF"/>
         </Menu>
         <ToolBar VerticalAlignment="Top" Height="34" Grid.Row="1" Grid.ColumnSpan="2">
-            <Button ToolTip="Открыть таблицу (Загрузка из файла)" Click="Open_Click">
+            <Button x:Name="OpenToolBar" ToolTip="Открыть таблицу (Загрузка из файла)" Click="Open_Click">
                 <Image Source="icons/LoadFrom.ico"/>
             </Button>
-            <Button  ToolTip="Сохранить таблицы в файл" Click="Save_Click">
+            <Button x:Name="SaveToolBar"  ToolTip="Сохранить таблицы в файл" Click="Save_Click">
                 <Image Source="icons/SaveTo.ico"/>
             </Button>
-            <Button ToolTip="Создать пустую таблицу" Click="CreateMas_Click">
+            <Button x:Name="CreateMasToolBar" ToolTip="Создать пустую таблицу" Click="CreateMas_Click">
                 <Image Source="icons/CreateEmptyTable.ico"/>
             </Button>
             <Button x:Name="FillToolBar" ToolTip="Заполяет таблицу заданным диапазоном" Click="Fill_Click" IsEnabled="False">

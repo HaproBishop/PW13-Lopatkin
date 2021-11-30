@@ -102,7 +102,8 @@ namespace PW13
 
             if (savefile.ShowDialog() == true)
             {                
-                WorkMas._twomas = true;                
+                if(e.Source == SaveMenu || e.Source == SaveToolBar) WorkMas._twomas = true;   
+                else WorkMas._twomas = false;
                 WorkMas.Save_File(savefile.FileName); //Обращение к функции с параметром (аналогично предыдущему) 
                 VisualArray.ClearUndoAndCancelUndo();
             }
@@ -285,8 +286,8 @@ namespace PW13
         }
         private void DynamicActionsOnOrOff(RoutedEventArgs e)
         {
-            if (e.Source == CreateMas || e.Source == CreateMasMenu 
-                || e.Source == OpenMenu)
+            if (e.Source == CreateMas || e.Source == CreateMasMenu || e.Source == CreateMasToolBar
+                || e.Source == OpenMenu || e.Source == OpenToolBar)
             {
                 DynamicActions.IsEnabled = true;
                 AddColumnContextMenu.IsEnabled = true;
@@ -330,7 +331,22 @@ namespace PW13
             VisualArray.ClearUndoAndCancelUndo();
             int [][] result = FindCountMoreAvgColumnClass.FindCountMoreAvgColumn(WorkMas._dmas);
             AvgOfColumns.ItemsSource = VisualArray.ToDataTable(result[0]).DefaultView;
-            CountMoreAvgOfColumns.ItemsSource = VisualArray.ToDataTable(result[1]).DefaultView;
+            CountMoreAvgOfColumns.ItemsSource = VisualArray.ToDataTable(result[1]).DefaultView;            
+            MessageBoxResult saveresult = MessageBox.Show("Вы хотите сохранить результаты среднего арифметического столбцов?", "Сохранение результатов среднего арифметического",
+                MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (saveresult == MessageBoxResult.Yes)
+            {
+                WorkMas._mas = result[0];
+                Save_Click(sender, e);
+            }
+            saveresult = MessageBox.Show("Вы хотите сохранить результаты количества значений ячеек, больших среднего" +
+                " арифметического?", "Сохранение результатов количества",
+                MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (saveresult == MessageBoxResult.Yes)
+            {
+                WorkMas._mas = result[1];
+                Save_Click(sender, e);
+            }
         }
     }
 }
