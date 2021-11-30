@@ -42,7 +42,7 @@ namespace PW13
             if (WorkMas._dmas != null)
             {
                 string _linelength = "";
-                if (VisualTable.SelectedItem == null) CurrentCell.Text = _defaultcurrentcell;
+                if (VisualTable.SelectedIndex == -1 || VisualTable.CurrentCell.Column == null) CurrentCell.Text = _defaultcurrentcell;
                 else CurrentCell.Text = (VisualTable.CurrentCell.Column.DisplayIndex + 1).ToString() + " столбец / " + (VisualTable.SelectedIndex + 1) + " строка";
 
                 if (WorkMas._dmas.GetLength(1) <= 4)
