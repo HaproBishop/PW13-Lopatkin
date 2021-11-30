@@ -658,10 +658,10 @@
                 <Image Source="icons/SaveTo.ico"/>
             </Button>
             <Button ToolTip="Создать пустую таблицу" Click="CreateMas_Click">
-                <Image Source="LogoIco.ico"/>
+                <Image Source="icons/CreateEmptyTable.ico"/>
             </Button>
             <Button x:Name="FillToolBar" ToolTip="Заполяет таблицу заданным диапазоном" Click="Fill_Click" IsEnabled="False">
-                <Image Source="LogoIco.ico"/>
+                <Image Source="icons/FillTable.ico"/>
             </Button>
             <Button x:Name="ClearTableToolBar" ToolTip="Очищает таблицу" Click="ClearTable_Click" IsEnabled="False">
                 <Button.Background>

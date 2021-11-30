@@ -126,5 +126,9 @@
   <ItemGroup>
     <Resource Include="icons\Clear.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\CreateEmptyTable.ico" />
+    <Resource Include="icons\FillTable.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
