@@ -31,7 +31,7 @@ namespace PW13
         public MainWindow()
         {
             InitializeComponent();
-            DispatcherTimer cell = new DispatcherTimer();
+            DispatcherTimer cell = new DispatcherTimer();//Таймер для StatusBar
             cell.Tick += Cell_Tick;
             cell.Interval = new TimeSpan(0,0,0,0,200);
             cell.IsEnabled = true;            
@@ -61,7 +61,11 @@ namespace PW13
                 TableLength.Text = "Таблица не создана";
             }
         }
-
+        /// <summary>
+        /// Шаблонное открытие таблицы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Open_Click(object sender, RoutedEventArgs e)
         {            
             OpenFileDialog openfile = new OpenFileDialog
@@ -81,7 +85,11 @@ namespace PW13
                 DynamicActionsOnOrOff(e);
             }
         }
-
+        /// <summary>
+        /// Шаблонное сохранение таблицы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Save_Click(object sender, RoutedEventArgs e)
         {            
             SaveFileDialog savefile = new SaveFileDialog
@@ -99,15 +107,24 @@ namespace PW13
                 VisualArray.ClearUndoAndCancelUndo();
             }
         }
-
+        /// <summary>
+        /// Очистка таблицы;
+        /// Также производится очистка undo and cancelundo
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ClearTable_Click(object sender, RoutedEventArgs e)
         {
             VisualTable.ItemsSource = WorkMas.ClearTable(); //Обращение к функции "очистки" массива и возвращение null для DataGrid(Очистка таблицы)
-            VisualArray.ClearUndoAndCancelUndo();
+            VisualArray.ClearUndoAndCancelUndo();//Обращение к методу очистки undo and cancelundo
             DynamicActionsOnOrOff(e);
             ClearResults();
         }
-
+        /// <summary>
+        /// Создание пустой таблицы, заполненной нулями
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CreateMas_Click(object sender, RoutedEventArgs e)
         {
             ClearResults();
@@ -121,12 +138,20 @@ namespace PW13
                 DynamicActionsOnOrOff(e);                
             }           
         }
-
+        /// <summary>
+        /// Выход (Закрытие программы)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Exit_Click(object sender, RoutedEventArgs e) //Закрытие программы
         {
             Close();
         }
-
+        /// <summary>
+        /// Сообщение пользователю о работе программы, а также о разработчике
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AboutProgram_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Практическая работа №13. Лопаткин Сергей Михайлович. " +
@@ -134,11 +159,16 @@ namespace PW13
                 "больших среднего арифметического всех элементов этого столбца",
                 "О программе", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+        /// <summary>
+        /// Заполнение массива
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Fill_Click(object sender, RoutedEventArgs e)
         {
             ClearResults();
             bool prv_range = int.TryParse(Range.Text, out int range);
-            if (prv_range == true && WorkMas._dmas != null) //2-ое условие - проверка на заполнение без скелета
+            if (prv_range == true && WorkMas._dmas != null) //2-ое условие - проверка на заполнение без скелета(В нашем случае - проверка на скелет не нужна)
             {                
                 WorkMas.FillDMas(in range);//Обращение с передачей информации об диапазоне
                 VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas._dmas).DefaultView; //Отображение таблицы с заполненными значениями
@@ -146,35 +176,44 @@ namespace PW13
             else MessageBox.Show("Введен некорректно диапазон значений",
                 "Внимание!", MessageBoxButton.OK, MessageBoxImage.Error);
         }
-
+        /// <summary>
+        /// Справка пользователю об особенностях программы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Support_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("1) В программе нельзя вводить более трехзначных чисел для диапазона и двухзначных для столбцов и строк.\n" +
                 "2)Заполнение происходит от 0 до указанного вами значения\n" +
                 "3)Для включения кнопок \"Выполнить\" и \"Заполнить\" необходимо создать таблицу.", "Справка", MessageBoxButton.OK, MessageBoxImage.Information);
         }
-
+        /// <summary>
+        /// Событие окончания изменения значения ячейки 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void VisualTable_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {                                 
-            object cell = VisualTable.SelectedItem;
+            object cell = VisualTable.SelectedItem;//Зарезервированное значение ячейки до изменения
             int iRow = e.Row.GetIndex();
             int iColumn = e.Column.DisplayIndex;
             bool tryedit = int.TryParse(((TextBox)e.EditingElement).Text, out int value);
             if (tryedit)
             {
-                WorkMas._dmas[iRow, iColumn] = value;
-                VisualArray.ReserveTable(WorkMas._dmas);
+                WorkMas._dmas[iRow, iColumn] = value;//Занесение значения в двумерный массив(указанная ячейка)
+                VisualArray.ReserveTable(WorkMas._dmas);//Резервирование текущей таблицы при успешном изменении значения
+                ClearResults();
             }
             else 
             {
-                VisualTable.SelectedItem = cell;
+                VisualTable.SelectedItem = cell;//Возвращение значения ячейки при неверном вводе
             }
             if (e.EditAction == DataGridEditAction.Cancel)
             {
-                VisualTable.SelectedItem = cell;
+                VisualTable.SelectedItem = cell;//Возвращение значения перед изменениями, если была произведена отмена
             }
         }
-
+        //Переключение дефолта относительно полученного фокуса
         private void CountColumns_GotFocus(object sender, RoutedEventArgs e)
         {
             CreateMas.IsDefault = true;
@@ -186,7 +225,11 @@ namespace PW13
             CreateMas.IsDefault = false;
             Fill.IsDefault = true;
         }
-
+        /// <summary>
+        /// Событие нажатия клавиш для окна (В данном случае используется для горячих клавиш)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MainWin_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.O) Open_Click(sender, e);
@@ -202,10 +245,10 @@ namespace PW13
             
             if (((e.KeyboardDevice.Modifiers & (ModifierKeys.Control | ModifierKeys.Shift)) == 
                 (ModifierKeys.Control | ModifierKeys.Shift) && e.Key == Key.Z) ^
-                (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.Y))              
+                (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.Y))            
             {
                 VisualTable.ItemsSource = VisualArray.CancelUndo().DefaultView;
-                WorkMas._dmas = VisualArray.SyncData();
+                WorkMas._dmas = VisualArray.SyncData();//Обязательная синхронизация
             }
         }
 

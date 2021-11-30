@@ -10,7 +10,7 @@ namespace VisualTable
     /// <summary>
     ///Класс для связывания массива с элементом DataGrid
     ///для визуализации данных, где усовершенствовано на удаление значений, восстановление при необходимости.
-    ///тоит заметить одну отличительную черту в данном классе - перед любыми действиями скелетом таблицы необходимо синхронизировать данные
+    ///Синхронизацию данных после выполнения undo and cancelundo обязательно
     ///Данные резервируются посредством взаимодействия двух методов ReserveTable и SyncData
     ///Пример: VisualArray.ReserveTable(SyncData());
     /// </summary>
@@ -19,29 +19,15 @@ namespace VisualTable
         public static DataTable _res;//Таблица
         private static Stack<int[,]> _reservedtable = new Stack<int[,]>();//Стек массивов(Зарезервированные таблицы)
         private static Stack<int[,]> _cancelledchanges = new Stack<int[,]>();//Стек массивов с отмененными изменениями
-        private static bool _needreserve = true;//Используется для свойства NeedReserve
-        private static bool _firstcelleditending = true;//Значение для FirstCellEditEnding
-        private static bool _wascancel;        
+        private static bool _needreserve = true;//Используется для свойства NeedReserve        
+        private static bool _wascancel;    //Значение об отмене изменений (была ли она)                                                         
+        public static Stack<int[,]> ReservedTable { get => _reservedtable; }//Значение зарезервированных таблиц
+        public static Stack<int[,]> CancelledChanges { get => _cancelledchanges; }//Значение отмененных таблиц
         /// <summary>
-        /// Используется в случаях, когда при обновлении таблицы не нужно резервировать данные для последующего
-        /// ее восстановления. Нужно false для изменения значений ячеек
-        /// Пример:
-        /// WorkMas.dmas = VisualArray.SyncData();
-        /// VisualArray.NeedReserve = false;
-        /// WorkMas.FillDMas(in range); - метод для заполнения массива значениями
-        /// VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas.dmas).DefaultView;        
+        /// Метод заполнения таблицы для одномерного значения (может использоваться для вывода результатов)
         /// </summary>
-        public static bool NeedReserve { get => _needreserve; set => _needreserve = value; }
-        /// <summary>
-        /// Обязательно используется для предотвращения первого резерва совместно с синхронизацией данных
-        /// Применимо к следующей строке кода: VisualArray.ReserveTable(WorkMas.dmas = VisualArray.SyncData());
-        /// Проверка задается условием
-        /// true - по умолчанию. После первого изменения необходимо выставить false;
-        /// Использовать исключительно для события CellEditEnding
-        /// </summary>
-        public static bool FirstCellEditEnding { get => _firstcelleditending; set => _firstcelleditending = value; }
-        public static Stack<int[,]> ReservedTable { get => _reservedtable; }
-        public static Stack<int[,]> CancelledChanges { get => _cancelledchanges; }
+        /// <param name="matrix"></param>
+        /// <returns></returns>
         public static DataTable ToDataTable(int[] matrix)
         {
             DataTable result = new DataTable();
@@ -125,6 +111,11 @@ namespace VisualTable
             _res = ToDataTable(dmas);
             return _res;
         }
+        /// <summary>
+        /// Обновление значений для массива относительно таблицы (необходимо использовать в основной программе после метода cancel или cancelundo)
+        /// для успешного восстановления значений или возврата к проделанным изменениям
+        /// </summary>
+        /// <returns></returns>
         public static int[,] SyncData()
         {            
             int[,] dmas = new int[_res.Rows.Count, _res.Columns.Count];
@@ -206,12 +197,12 @@ namespace VisualTable
         /// <param name="dmas"></param>
         public static void ReserveTable(int[,] dmas)
         {
-            if (_wascancel)
-            {
+            if (_wascancel)//Проверка на резервирование после отмены действий (используется для фиксации отката и возможности выполнения отмены при новых значениях                           
+            {//не затрагивая старые)
                 _cancelledchanges = new Stack<int[,]>();
                 _wascancel = false;
             }
-            _reservedtable.Push((int[,])dmas.Clone());
+            _reservedtable.Push((int[,])dmas.Clone());//Внесение клона массива, чтобы не было ссылки на него при сохранении данных
 
         }/// <summary>
          /// Отмена изменений таблицы
@@ -242,7 +233,9 @@ namespace VisualTable
                 return ToDataTable(_cancelledchanges.Pop());
             }
             return _res;
-        }
+        }/// <summary>
+        /// Очистка значений UndoAndCancelUndo
+        /// </summary>
         public static void ClearUndoAndCancelUndo()
         {
             _cancelledchanges = new Stack<int[,]>();
