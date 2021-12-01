@@ -190,9 +190,7 @@ namespace VisualTable
             }
             return newdmas;
         }/// <summary>
-        /// Используется при любом изменении скелета таблицы
-        /// P.S. Используется совместно с SyncData методом в данном классе
-        /// Пример: ReserveTable(SyncData());
+        /// Используется для резерва при изменении значения ячейки. Специализирована для undo and cancelundo
         /// </summary>
         /// <param name="dmas"></param>
         public static void ReserveTable(int[,] dmas)
