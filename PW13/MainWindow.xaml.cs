@@ -133,8 +133,9 @@ namespace PW13
             {
                 WorkMas.CreateMas(in rows, in columns);
                 VisualArray.ClearUndoAndCancelUndo();
-                VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas._dmas).DefaultView;                
-            }           
+                VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas._dmas).DefaultView;
+            }
+            else MessageBox.Show("Ошибка. Числа должны быть больше 0", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         /// <summary>
         /// Выход (Закрытие программы)
@@ -166,13 +167,17 @@ namespace PW13
         {
             ClearResults();
             bool prv_range = int.TryParse(Range.Text, out int range);
-            if (prv_range == true && WorkMas._dmas != null && range > 0) //2-ое условие - проверка на заполнение без скелета(В нашем случае - проверка на скелет не нужна)
-            {                
-                WorkMas.FillDMas(in range);//Обращение с передачей информации об диапазоне
-                VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas._dmas).DefaultView; //Отображение таблицы с заполненными значениями
+            if (WorkMas._dmas != null)
+            {
+                if (prv_range == true && range > 0) //2-ое условие - проверка на заполнение без скелета(В нашем случае - проверка на скелет не нужна)
+                {
+                    WorkMas.FillDMas(in range);//Обращение с передачей информации об диапазоне
+                    VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas._dmas).DefaultView; //Отображение таблицы с заполненными значениями
+                }
+                else MessageBox.Show("Введен некорректно диапазон значений, необходимо больше 0",
+                    "Внимание!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            else MessageBox.Show("Введен некорректно диапазон значений, необходимо больше 0",
-                "Внимание!", MessageBoxButton.OK, MessageBoxImage.Error);
+            else MessageForUserAboutTableIsNull();
         }
         /// <summary>
         /// Справка пользователю об особенностях программы
@@ -204,6 +209,8 @@ namespace PW13
             }
             else 
             {
+                MessageBox.Show("Ошибка. Необходимо ввести число, а не символ.", "Ошибка", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
                 VisualTable.SelectedItem = cell;//Возвращение значения ячейки при неверном вводе
             }
             if (e.EditAction == DataGridEditAction.Cancel)
@@ -256,21 +263,30 @@ namespace PW13
         }
         private void AddColumn_Click(object sender, RoutedEventArgs e)
         {
-            ClearResults();            
-            VisualTable.ItemsSource = VisualArray.AddNewColumn(ref WorkMas._dmas).DefaultView;            
+            if (WorkMas._dmas != null)
+            {
+                ClearResults();
+                VisualTable.ItemsSource = VisualArray.AddNewColumn(ref WorkMas._dmas).DefaultView;
+            }
+            else MessageForUserAboutTableIsNull();
         }
         private void AddRow_Click(object sender, RoutedEventArgs e)
         {
-            ClearResults();            
-            VisualTable.ItemsSource = VisualArray.AddNewRow(ref WorkMas._dmas).DefaultView;            
+            if (WorkMas._dmas != null)
+            {
+                ClearResults();
+                VisualTable.ItemsSource = VisualArray.AddNewRow(ref WorkMas._dmas).DefaultView;
+            }
+            else MessageForUserAboutTableIsNull();
         }
         private void DeleteColumn_Click(object sender, RoutedEventArgs e)
         {
-            if (VisualTable.CurrentCell.Column.DisplayIndex != -1)
+            if (VisualTable.CurrentCell.Column.DisplayIndex != -1 || VisualTable.CurrentCell.Column != null)
             {
-                ClearResults();                
+                ClearResults();
                 VisualTable.ItemsSource = VisualArray.DeleteColumn(ref WorkMas._dmas, VisualTable.CurrentCell.Column.DisplayIndex).DefaultView;
             }
+            else MessageForUserAboutUnselectedCell();
         }
 
         private void DeleteRow_Click(object sender, RoutedEventArgs e)
@@ -280,6 +296,7 @@ namespace PW13
                 ClearResults();                
                 VisualTable.ItemsSource = VisualArray.DeleteRow(ref WorkMas._dmas, VisualTable.SelectedIndex).DefaultView;
             }
+            else MessageForUserAboutUnselectedCell();
         }
         private void ClearResults()
         {
@@ -288,26 +305,40 @@ namespace PW13
         }
 
         private void Find_Click(object sender, RoutedEventArgs e)
-        {            
-            VisualArray.ClearUndoAndCancelUndo();
-            int [][] result = FindCountMoreAvgColumnClass.FindCountMoreAvgColumn(WorkMas._dmas);
-            AvgOfColumns.ItemsSource = VisualArray.ToDataTable(result[0]).DefaultView;
-            CountMoreAvgOfColumns.ItemsSource = VisualArray.ToDataTable(result[1]).DefaultView;            
-            MessageBoxResult saveresult = MessageBox.Show("Вы хотите сохранить результаты среднего арифметического столбцов?", "Сохранение результатов среднего арифметического",
-                MessageBoxButton.YesNo, MessageBoxImage.Question);
-            if (saveresult == MessageBoxResult.Yes)
+        {
+            if (WorkMas._dmas != null)
             {
-                WorkMas._mas = result[0];
-                Save_Click(sender, e);
+                VisualArray.ClearUndoAndCancelUndo();
+                int[][] result = FindCountMoreAvgColumnClass.FindCountMoreAvgColumn(WorkMas._dmas);
+                AvgOfColumns.ItemsSource = VisualArray.ToDataTable(result[0]).DefaultView;
+                CountMoreAvgOfColumns.ItemsSource = VisualArray.ToDataTable(result[1]).DefaultView;
+                MessageBoxResult saveresult = MessageBox.Show("Вы хотите сохранить результаты среднего арифметического столбцов?", "Сохранение результатов среднего арифметического",
+                    MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (saveresult == MessageBoxResult.Yes)
+                {
+                    WorkMas._mas = result[0];
+                    Save_Click(sender, e);
+                }
+                saveresult = MessageBox.Show("Вы хотите сохранить результаты количества значений ячеек, больших среднего" +
+                    " арифметического?", "Сохранение результатов количества",
+                    MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (saveresult == MessageBoxResult.Yes)
+                {
+                    WorkMas._mas = result[1];
+                    Save_Click(sender, e);
+                }
             }
-            saveresult = MessageBox.Show("Вы хотите сохранить результаты количества значений ячеек, больших среднего" +
-                " арифметического?", "Сохранение результатов количества",
-                MessageBoxButton.YesNo, MessageBoxImage.Question);
-            if (saveresult == MessageBoxResult.Yes)
-            {
-                WorkMas._mas = result[1];
-                Save_Click(sender, e);
-            }
+            else MessageForUserAboutTableIsNull();
+        }
+        public void MessageForUserAboutTableIsNull()
+        {
+            MessageBox.Show("В несуществующую таблицу нельзя занести данные! Создайте таблицу для заполнения" +
+                " ее значениями!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        public void MessageForUserAboutUnselectedCell()
+        {
+            MessageBox.Show("Необходимо выбрать ячейку с определенным номером столбца или строки, чтобы произвести удаление!",
+                "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }
