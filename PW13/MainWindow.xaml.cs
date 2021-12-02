@@ -48,7 +48,7 @@ namespace PW13
                 if (WorkMas._dmas.GetLength(1) <= 4)
                     _linelength = WorkMas._dmas.GetLength(1).ToString() + " столбца / ";
                 else
-                    TableLength.Text = WorkMas._dmas.GetLength(1).ToString() + " столбцов / ";
+                    _linelength = WorkMas._dmas.GetLength(1).ToString() + " столбцов / ";
                 if (WorkMas._dmas.GetLength(0) <= 4)
                     _linelength += WorkMas._dmas.GetLength(0).ToString() + " строки";
                 else
@@ -81,8 +81,7 @@ namespace PW13
                 WorkMas.Open_File(openfile.FileName); //Обращение к функции с параметром (название текстового файла, в котором хранятся данные)
                 VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas._dmas).DefaultView; //Отображение данных, считанных с файла
                 ClearResults();
-                VisualArray.ClearUndoAndCancelUndo();
-                DynamicActionsOnOrOff(e);
+                VisualArray.ClearUndoAndCancelUndo();                
             }
         }
         /// <summary>
@@ -117,8 +116,7 @@ namespace PW13
         private void ClearTable_Click(object sender, RoutedEventArgs e)
         {
             VisualTable.ItemsSource = WorkMas.ClearTable(); //Обращение к функции "очистки" массива и возвращение null для DataGrid(Очистка таблицы)
-            VisualArray.ClearUndoAndCancelUndo();//Обращение к методу очистки undo and cancelundo
-            DynamicActionsOnOrOff(e);
+            VisualArray.ClearUndoAndCancelUndo();//Обращение к методу очистки undo and cancelundo            
             ClearResults();
         }
         /// <summary>
@@ -131,12 +129,11 @@ namespace PW13
             ClearResults();
             bool prv_columns = int.TryParse(CountColumns.Text, out int columns);
             bool prv_rows = int.TryParse(CountRows.Text, out int rows);
-            if (prv_columns == true && prv_rows == true)
+            if (prv_columns == true && prv_rows == true && columns > 0 && rows > 0)
             {
                 WorkMas.CreateMas(in rows, in columns);
                 VisualArray.ClearUndoAndCancelUndo();
-                VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas._dmas).DefaultView;
-                DynamicActionsOnOrOff(e);                
+                VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas._dmas).DefaultView;                
             }           
         }
         /// <summary>
@@ -169,12 +166,12 @@ namespace PW13
         {
             ClearResults();
             bool prv_range = int.TryParse(Range.Text, out int range);
-            if (prv_range == true && WorkMas._dmas != null) //2-ое условие - проверка на заполнение без скелета(В нашем случае - проверка на скелет не нужна)
+            if (prv_range == true && WorkMas._dmas != null && range > 0) //2-ое условие - проверка на заполнение без скелета(В нашем случае - проверка на скелет не нужна)
             {                
                 WorkMas.FillDMas(in range);//Обращение с передачей информации об диапазоне
                 VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas._dmas).DefaultView; //Отображение таблицы с заполненными значениями
             }
-            else MessageBox.Show("Введен некорректно диапазон значений",
+            else MessageBox.Show("Введен некорректно диапазон значений, необходимо больше 0",
                 "Внимание!", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         /// <summary>
@@ -282,42 +279,6 @@ namespace PW13
             {
                 ClearResults();                
                 VisualTable.ItemsSource = VisualArray.DeleteRow(ref WorkMas._dmas, VisualTable.SelectedIndex).DefaultView;
-            }
-        }
-        private void DynamicActionsOnOrOff(RoutedEventArgs e)
-        {
-            if (e.Source == CreateMas || e.Source == CreateMasMenu || e.Source == CreateMasToolBar
-                || e.Source == OpenMenu || e.Source == OpenToolBar)
-            {
-                DynamicActions.IsEnabled = true;
-                AddColumnContextMenu.IsEnabled = true;
-                AddRowContextMenu.IsEnabled = true;
-                DeleteColumnContextMenu.IsEnabled = true;
-                DeleteRowContextMenu.IsEnabled = true;                
-                Find.IsEnabled = true;
-                FindMenu.IsEnabled = true;
-                Fill.IsEnabled = true;
-                FillMenu.IsEnabled = true;
-                FillToolBar.IsEnabled = true;
-                ClearTable.IsEnabled = true;
-                ClearTableMenu.IsEnabled = true;
-                ClearTableToolBar.IsEnabled = true;
-            }
-            else
-            {
-                DynamicActions.IsEnabled = false;
-                AddColumnContextMenu.IsEnabled = false;
-                AddRowContextMenu.IsEnabled = false;
-                DeleteColumnContextMenu.IsEnabled = false;
-                DeleteRowContextMenu.IsEnabled = false;                
-                Find.IsEnabled = false;
-                FindMenu.IsEnabled = false;
-                Fill.IsEnabled = false;
-                FillMenu.IsEnabled = false;
-                FillToolBar.IsEnabled = false;
-                ClearTable.IsEnabled = false;
-                ClearTableMenu.IsEnabled = false;
-                ClearTableToolBar.IsEnabled = false;
             }
         }
         private void ClearResults()
