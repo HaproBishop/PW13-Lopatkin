@@ -681,6 +681,13 @@
                 <Image Source="icons/DelRow.ico"/>
             </Button>
             <Separator/>
+            <Button ToolTip="Восстанавливает таблицу до предыдущего состояния" Click="Undo_Click">
+                <Image Source="icons/Undo.ico"/>
+            </Button>
+            <Button ToolTip="Отменяет восстановленное состояние таблицы" Click="CancelUndo_Click">
+                <Image Source="icons/CancelUndo.ico"/>
+            </Button>
+            <Separator/>
             <Button ToolTip="Показывает справку для отображения особенностей программы" Click="Support_Click">
                 <Image Source="icons/Support.ico"/>
             </Button>

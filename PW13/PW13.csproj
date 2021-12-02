@@ -136,5 +136,9 @@
     <Resource Include="icons\DelColumn.ico" />
     <Resource Include="icons\DelRow.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\CancelUndo.ico" />
+    <Resource Include="icons\Undo.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
