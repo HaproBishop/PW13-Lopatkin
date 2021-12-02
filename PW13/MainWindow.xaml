@@ -709,10 +709,10 @@
                 <DataGrid x:Name="VisualTable" CellEditEnding="VisualTable_CellEditEnding" PreviewTextInput="VisualTable_PreviewTextInput" CanUserAddRows="False" CanUserDeleteRows="False">
                     <DataGrid.ContextMenu>
                         <ContextMenu>
-                            <MenuItem x:Name="AddColumnContextMenu" Header="Добавить столбец" IsEnabled="False" Click="AddColumn_Click"/>
-                            <MenuItem x:Name="DeleteColumnContextMenu" Header="Удалить столбец" IsEnabled="False" Click="DeleteColumn_Click"/>
-                            <MenuItem x:Name="AddRowContextMenu" Header="Добавить строку" IsEnabled="False" Click="AddRow_Click"/>
-                            <MenuItem x:Name="DeleteRowContextMenu" Header="Удалить строку" IsEnabled="False" Click="DeleteRow_Click"/>
+                            <MenuItem x:Name="AddColumnContextMenu" Header="Добавить столбец" Click="AddColumn_Click"/>
+                            <MenuItem x:Name="DeleteColumnContextMenu" Header="Удалить столбец" Click="DeleteColumn_Click"/>
+                            <MenuItem x:Name="AddRowContextMenu" Header="Добавить строку" Click="AddRow_Click"/>
+                            <MenuItem x:Name="DeleteRowContextMenu" Header="Удалить строку" Click="DeleteRow_Click"/>
                         </ContextMenu>
                     </DataGrid.ContextMenu>
                 </DataGrid>
