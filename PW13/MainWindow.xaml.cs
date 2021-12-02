@@ -45,11 +45,11 @@ namespace PW13
                 if (VisualTable.SelectedIndex == -1 || VisualTable.CurrentCell.Column == null) CurrentCell.Text = _defaultcurrentcell;
                 else CurrentCell.Text = (VisualTable.CurrentCell.Column.DisplayIndex + 1).ToString() + " столбец / " + (VisualTable.SelectedIndex + 1) + " строка";
 
-                if (WorkMas._dmas.GetLength(1) <= 4)
+                if (WorkMas._dmas.GetLength(1) <= 4 && WorkMas._dmas.GetLength(1) != 0)
                     _linelength = WorkMas._dmas.GetLength(1).ToString() + " столбца / ";
                 else
                     _linelength = WorkMas._dmas.GetLength(1).ToString() + " столбцов / ";
-                if (WorkMas._dmas.GetLength(0) <= 4)
+                if (WorkMas._dmas.GetLength(0) <= 4 && WorkMas._dmas.GetLength(0) != 0)
                     _linelength += WorkMas._dmas.GetLength(0).ToString() + " строки";
                 else
                     _linelength += WorkMas._dmas.GetLength(0).ToString() + " строк";
