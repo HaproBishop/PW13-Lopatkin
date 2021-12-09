@@ -635,85 +635,85 @@
             <TextBlock x:Name="TableLength"/>
         </StatusBar>
         <Menu VerticalAlignment="Top" Margin="-1,0,1,0" Height="18" Grid.ColumnSpan="2" Background="#FFB052FF">
-            <MenuItem Header="Файл">
+            <MenuItem Header="Файл" Focusable="False">
                 <MenuItem x:Name="OpenMenu" Header="Открыть" Click="Open_Click" ToolTip="Открывает таблицу из файла"/>
                 <MenuItem x:Name="SaveMenu" Header="Сохранить" Click="Save_Click" ToolTip="Сохраняет таблицу"/>
                 <Separator Background="Black"/>
                 <MenuItem x:Name="ExitMenu" Header="Выход" Click="Exit_Click" ToolTip="Закрывает программу"/>
             </MenuItem>
-            <MenuItem x:Name="Actions"  Header="Действия">
+            <MenuItem x:Name="Actions"  Header="Действия" Focusable="False">
                 <MenuItem x:Name="CreateMasMenu"  Header="Создать" Click="CreateMas_Click" ToolTip="Создает пустую таблицу"/>
                 <MenuItem x:Name="FillMenu" Header="Заполнить" Click="Fill_Click" ToolTip="Заполняет таблицу случайными значениями в заданном диапазоне"/>
                 <MenuItem x:Name="FindMenu"  Header="Вычислить" Click="Find_Click"/>
                 <MenuItem x:Name="ClearTableMenu" Header="Очистить таблицу" Click="ClearTable_Click"/>
             </MenuItem>
-            <MenuItem x:Name="SupportMenu" Header="Справка" Click="Support_Click" Background="#FFB052FF"/>
-            <MenuItem x:Name="AboutProgramMenu" Header="О программе" Click="AboutProgram_Click" Background="#FFB052FF"/>
+            <MenuItem x:Name="SupportMenu" Header="Справка" Click="Support_Click" Background="#FFB052FF" Focusable="False"/>
+            <MenuItem x:Name="AboutProgramMenu" Header="О программе" Click="AboutProgram_Click" Background="#FFB052FF" Focusable="False"/>
         </Menu>
         <ToolBar VerticalAlignment="Top" Height="40" Grid.Row="1" Grid.ColumnSpan="2">
-            <Button x:Name="OpenToolBar" ToolTip="Открыть таблицу (Загрузка из файла)" Click="Open_Click">
+            <Button x:Name="OpenToolBar" ToolTip="Открыть таблицу (Загрузка из файла)" Click="Open_Click" Focusable="False">
                 <Image Source="icons/LoadFrom.ico"/>
             </Button>
-            <Button x:Name="SaveToolBar"  ToolTip="Сохранить таблицы в файл" Click="Save_Click">
+            <Button x:Name="SaveToolBar"  ToolTip="Сохранить таблицы в файл" Click="Save_Click" Focusable="False">
                 <Image Source="icons/SaveTo.ico"/>
             </Button>
             <Separator/>
-            <Button x:Name="CreateMasToolBar" ToolTip="Создать пустую таблицу" Click="CreateMas_Click">
+            <Button x:Name="CreateMasToolBar" ToolTip="Создать пустую таблицу" Click="CreateMas_Click" Focusable="False">
                 <Image Source="icons/CreateEmptyTable.ico"/>
             </Button>
-            <Button x:Name="FillToolBar" ToolTip="Заполяет таблицу заданным диапазоном" Click="Fill_Click">
+            <Button x:Name="FillToolBar" ToolTip="Заполяет таблицу заданным диапазоном" Click="Fill_Click" Focusable="False">
                 <Image Source="icons/FillTable.ico"/>
             </Button>
-            <Button x:Name="ClearTableToolBar" ToolTip="Очищает таблицу" Click="ClearTable_Click">
+            <Button x:Name="ClearTableToolBar" ToolTip="Очищает таблицу" Click="ClearTable_Click" Focusable="False">
                 <Image Source="icons/Clear.ico"/>
             </Button>
             <Separator/>
-            <Button x:Name="AddColumn" ToolTip="Добавляет столбец" Click="AddColumn_Click">
+            <Button x:Name="AddColumn" ToolTip="Добавляет столбец" Click="AddColumn_Click" Focusable="False">
                 <Image Source="icons/AddColumn.ico"/>
             </Button>
-            <Button x:Name="DeleteColumn" ToolTip="Удаляет столбец" Click="DeleteColumn_Click">
+            <Button x:Name="DeleteColumn" ToolTip="Удаляет столбец" Click="DeleteColumn_Click" Focusable="False">
                 <Image Source="icons/DelColumn.ico"/>
             </Button>
-            <Button x:Name="AddRow" ToolTip="Добавляет строку" Click="AddRow_Click">
+            <Button x:Name="AddRow" ToolTip="Добавляет строку" Click="AddRow_Click" Focusable="False">
                 <Image Source="icons/AddRow.ico"/>
             </Button>
-            <Button x:Name="DeleteRow" ToolTip="Удаляет строку" Click="DeleteRow_Click">
+            <Button x:Name="DeleteRow" ToolTip="Удаляет строку" Click="DeleteRow_Click" Focusable="False">
                 <Image Source="icons/DelRow.ico"/>
             </Button>
             <Separator/>
-            <Button ToolTip="Восстанавливает таблицу до предыдущего состояния" Click="Undo_Click">
+            <Button ToolTip="Восстанавливает таблицу до предыдущего состояния" Click="Undo_Click" Focusable="False">
                 <Image Source="icons/Undo.ico"/>
             </Button>
-            <Button ToolTip="Отменяет восстановленное состояние таблицы" Click="CancelUndo_Click">
+            <Button ToolTip="Отменяет восстановленное состояние таблицы" Click="CancelUndo_Click" Focusable="False">
                 <Image Source="icons/CancelUndo.ico"/>
             </Button>
             <Separator/>
-            <Button ToolTip="Показывает справку для отображения особенностей программы" Click="Support_Click">
+            <Button ToolTip="Показывает справку для отображения особенностей программы" Click="Support_Click" Focusable="False">
                 <Image Source="icons/Support.ico"/>
             </Button>
-            <Button ToolTip="Показывает сведения о программе" Click="AboutProgram_Click">
+            <Button ToolTip="Показывает сведения о программе" Click="AboutProgram_Click" Focusable="False">
                 <Image Source="icons/AboutProgram.ico"/>
             </Button>
-            <Button ToolTip="Закрытие программы (Выход)" Click="Exit_Click">
+            <Button ToolTip="Закрытие программы (Выход)" Click="Exit_Click" Focusable="False">
                 <Image Source="icons/Exit.ico"/>
             </Button>
         </ToolBar>
         <GroupBox Header="Очистка и вычисление" HorizontalAlignment="Right" Height="86" Margin="0,0,285,10" VerticalAlignment="Bottom" Width="188" Grid.Row="4" Grid.Column="1">
             <Grid>
-                <Button x:Name="ClearTable" Content="Очистить таблицу" Margin="10,10,10,0" VerticalAlignment="Top" Click="ClearTable_Click"/>
-                <Button x:Name="Find" Content="Вычислить"  Margin="10,35,10,0" VerticalAlignment="Top" Click="Find_Click" ToolTip="Производит нахождение среднего арифметического для каждого столбца, а также количества элементов, больших его"/>
+                <Button x:Name="ClearTable" Content="Очистить таблицу" Margin="10,10,10,0" VerticalAlignment="Top" Click="ClearTable_Click" TabIndex="5"/>
+                <Button x:Name="Find" Content="Вычислить"  Margin="10,35,10,0" VerticalAlignment="Top" Click="Find_Click" ToolTip="Производит нахождение среднего арифметического для каждого столбца, а также количества элементов, больших его" TabIndex="6"/>
             </Grid>
         </GroupBox>
         <GroupBox Header="Дополнительные функции программы" HorizontalAlignment="Right" Height="125" Margin="0,0,10,8" VerticalAlignment="Bottom" Width="236" Grid.Row="4" Grid.Column="1">
             <Grid>
-                <Button x:Name="Support" Content="Справка" HorizontalAlignment="Left" Margin="10,17,0,0" VerticalAlignment="Top" Width="204" Click="Support_Click"/>
-                <Button x:Name="AboutProgram" Content="О программе" HorizontalAlignment="Left" Margin="10,42,0,0" VerticalAlignment="Top" Width="204" Click="AboutProgram_Click" Height="22"/>
-                <Button x:Name="Exit" Content="Выход" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" Width="204" Click="Exit_Click" IsCancel="True" Height="20"/>
+                <Button x:Name="Support" Content="Справка" HorizontalAlignment="Left" Margin="10,17,0,0" VerticalAlignment="Top" Width="204" Click="Support_Click" TabIndex="7"/>
+                <Button x:Name="AboutProgram" Content="О программе" HorizontalAlignment="Left" Margin="10,42,0,0" VerticalAlignment="Top" Width="204" Click="AboutProgram_Click" Height="22" TabIndex="8"/>
+                <Button x:Name="Exit" Content="Выход" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" Width="204" Click="Exit_Click" IsCancel="True" Height="20" TabIndex="9"/>
             </Grid>
         </GroupBox>
         <GroupBox Header="Исходные данные" Grid.Row="2" Margin="10,10,10,14" Grid.RowSpan="2">
             <Grid>
-                <DataGrid x:Name="VisualTable" CellEditEnding="VisualTable_CellEditEnding" PreviewTextInput="VisualTable_PreviewTextInput" CanUserAddRows="False" CanUserDeleteRows="False">
+                <DataGrid x:Name="VisualTable" CellEditEnding="VisualTable_CellEditEnding" PreviewTextInput="VisualTable_PreviewTextInput" CanUserAddRows="False" CanUserDeleteRows="False" TabIndex="-1">
                     <DataGrid.ContextMenu>
                         <ContextMenu>
                             <MenuItem x:Name="AddColumnContextMenu" Header="Добавить столбец" Click="AddColumn_Click"/>
@@ -746,17 +746,17 @@
         <GroupBox Header="Создание скелета таблицы" HorizontalAlignment="Left" Height="128" Margin="10,0,0,5" VerticalAlignment="Bottom" Width="211" Grid.Row="4">
             <Grid>
                 <Label Content="Количество строк:" HorizontalAlignment="Left" Margin="10,38,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="CountColumns" HorizontalAlignment="Left" Height="23" Margin="152,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="40" MaxLength="2" GotFocus="CountColumns_GotFocus" PreviewTextInput="VisualTable_PreviewTextInput"/>
-                <TextBox x:Name="CountRows" HorizontalAlignment="Left" Height="23" Margin="152,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="40" MaxLength="2" GotFocus="CountColumns_GotFocus" PreviewTextInput="VisualTable_PreviewTextInput"/>
-                <Button x:Name="CreateMas" Content="Создать" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Width="182" Click="CreateMas_Click" Focusable="False" ToolTip="Создает таблицу, заполненную нулями"/>
+                <TextBox x:Name="CountColumns" HorizontalAlignment="Left" Height="23" Margin="152,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="40" MaxLength="2" GotFocus="Range_GotFocus" PreviewTextInput="VisualTable_PreviewTextInput" TabIndex="0"/>
+                <TextBox x:Name="CountRows" HorizontalAlignment="Left" Height="23" Margin="152,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="40" MaxLength="2" GotFocus="Range_GotFocus" PreviewTextInput="VisualTable_PreviewTextInput" TabIndex="1"/>
+                <Button x:Name="CreateMas" Content="Создать" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Width="182" Click="CreateMas_Click" Focusable="False" ToolTip="Создает таблицу, заполненную нулями" TabIndex="2"/>
                 <Label Content="Количество столбцов:" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top"/>
             </Grid>
         </GroupBox>
         <GroupBox x:Name="FillOfRandom" Header="Заполнение таблицы" HorizontalAlignment="Left" Height="94" Margin="260,0,0,5" VerticalAlignment="Bottom" Width="211" Grid.Row="4">
             <Grid>
                 <Label Content="Диапазон:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="Range" HorizontalAlignment="Left" Height="23" Margin="124,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="66" MaxLength="3" GotFocus="Range_GotFocus" PreviewTextInput="VisualTable_PreviewTextInput"/>
-                <Button x:Name="Fill" Content="Заполнить" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="180" Click="Fill_Click" Focusable="False" ToolTip="Заполняет таблицу случайными значениями в заданном диапазоне"/>
+                <TextBox x:Name="Range" HorizontalAlignment="Left" Height="23" Margin="124,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="66" MaxLength="3" GotFocus="Range_GotFocus" PreviewTextInput="VisualTable_PreviewTextInput" TabIndex="3"/>
+                <Button x:Name="Fill" Content="Заполнить" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="180" Click="Fill_Click" Focusable="False" ToolTip="Заполняет таблицу случайными значениями в заданном диапазоне" TabIndex="4"/>
             </Grid>
         </GroupBox>
     </Grid>

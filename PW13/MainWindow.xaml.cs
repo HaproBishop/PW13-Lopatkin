@@ -187,8 +187,13 @@ namespace PW13
         private void Support_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("1) В программе нельзя вводить более трехзначных чисел для диапазона и двухзначных для столбцов и строк.\n" +
-                "2)Заполнение происходит от 0 до указанного вами значения\n" +
-                "3)Для включения кнопок \"Выполнить\" и \"Заполнить\" необходимо создать таблицу.", "Справка", MessageBoxButton.OK, MessageBoxImage.Information);
+                "2) Заполнение происходит от 0 до указанного вами значения\n" +
+                "3) Для включения кнопок \"Выполнить\" и \"Заполнить\" необходимо создать таблицу.\n" +
+                "4) Пользователю, который НЕ ИМЕЕТ мышки, может воспользоваться горячими клавишами для изменения таблицы. Приведен следующий список:\n" +
+                "- ctrl+s - сохранение исходной таблицы\n" +
+                "- ctrl+o - открытие исходной сохраненной таблицы\n" +
+                "- ctrl+shift+a(d) - добавление(удаление) нового столбца\n" +
+                "- ctrl+a(d) - добавление(удаление) новой строки", "Справка", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         /// <summary>
         /// Событие окончания изменения значения ячейки 
@@ -219,16 +224,18 @@ namespace PW13
             }
         }
         //Переключение дефолта относительно полученного фокуса
-        private void CountColumns_GotFocus(object sender, RoutedEventArgs e)
-        {
-            CreateMas.IsDefault = true;
-            Fill.IsDefault = false;
-        }
-
         private void Range_GotFocus(object sender, RoutedEventArgs e)
         {
-            CreateMas.IsDefault = false;
-            Fill.IsDefault = true;
+            if (e.Source == Range)
+            {
+                CreateMas.IsDefault = false;
+                Fill.IsDefault = true;
+            }
+            else
+            {
+                CreateMas.IsDefault = true;
+                Fill.IsDefault = false;
+            }
         }
         /// <summary>
         /// Событие нажатия клавиш для окна (В данном случае используется для горячих клавиш)
@@ -252,6 +259,24 @@ namespace PW13
                 (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.Y))            
             {
                 CancelUndo_Click(sender, e);
+            }
+            if ((e.KeyboardDevice.Modifiers & (ModifierKeys.Control | ModifierKeys.Shift)) ==
+                (ModifierKeys.Control | ModifierKeys.Shift) && e.Key == Key.A)
+            {
+                AddColumn_Click(sender, e);
+            }
+            if (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.A)
+            {
+                AddRow_Click(sender, e);
+            }
+            if ((e.KeyboardDevice.Modifiers & (ModifierKeys.Control | ModifierKeys.Shift)) ==
+                (ModifierKeys.Control | ModifierKeys.Shift) && e.Key == Key.D)
+            {
+                DeleteColumn_Click(sender, e);
+            }
+            if (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.D)
+            {
+                DeleteRow_Click(sender, e);
             }
         }
 
@@ -327,12 +352,17 @@ namespace PW13
                 }
             }
             else MessageForUserAboutTableIsNull();
-        }
+        }/// <summary>
+        /// Метод для шаблонного отображения сообщения пользователю о требующейся созданной таблицы для возможности заполнения
+        /// </summary>
         public void MessageForUserAboutTableIsNull()
         {
             MessageBox.Show("В несуществующую таблицу нельзя занести данные! Создайте таблицу для заполнения" +
                 " ее значениями!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
         }
+        /// <summary>
+        /// Метод для шаблонного отображения сообщения пользователю о невыбранной ячейке
+        /// </summary>
         public void MessageForUserAboutUnselectedCell()
         {
             MessageBox.Show("Необходимо выбрать ячейку с определенным номером столбца или строки, чтобы произвести удаление!",

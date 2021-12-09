@@ -7,7 +7,9 @@ using System.IO;
 using Microsoft.Win32;
 
 namespace LibMas
-{
+{/// <summary>
+/// Класс для шаблонных действий с массивом
+/// </summary>
     public class WorkMas
     {
         public static int[] _mas;
