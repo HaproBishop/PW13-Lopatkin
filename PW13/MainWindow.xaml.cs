@@ -376,8 +376,8 @@ namespace PW13
             VisualTable.ItemsSource = VisualArray.CancelChanges().DefaultView;
             WorkMas._dmas = VisualArray.SyncData();
         }/// <summary>
-        /// Отмена восстановления предыдущего состояния таблицы
-        /// </summary>
+         /// Отмена восстановления предыдущего состояния таблицы
+         /// </summary>
         public void CancelUndo_Click(object sender, RoutedEventArgs e)
         {
             VisualTable.ItemsSource = VisualArray.CancelUndo().DefaultView;

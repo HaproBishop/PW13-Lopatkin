@@ -16,7 +16,7 @@ namespace VisualTable
     /// </summary>
     public static class VisualArray
     {        
-        public static DataTable _res;//Таблица
+        public static DataTable _res = new DataTable();//Таблица
         private static Stack<int[,]> _reservedtable = new Stack<int[,]>();//Стек массивов(Зарезервированные таблицы)
         private static Stack<int[,]> _cancelledchanges = new Stack<int[,]>();//Стек массивов с отмененными изменениями
         private static bool _needreserve = true;//Используется для свойства NeedReserve        
