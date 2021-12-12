@@ -15,7 +15,7 @@ namespace FindCountMoreAvgColumnLibrary
      /// <param name="dmas">Входной массив с, хранящимися в нем, данными</param>
      /// <returns>Возращает массив, где первая строка - среднее значение по каждому стоблцу, а вторая - количество 
      /// значений каждого столбца, которые больше его среднего арифметического</returns>
-        public static int[][] FindCountMoreAvgColumn(int [,] dmas)
+        public static int[][] FindCountMoreAvgColumn(in int [,] dmas)
         {
             int[][] resultarray = new int[2][];
             for (int i = 0; i < 2; i++)
