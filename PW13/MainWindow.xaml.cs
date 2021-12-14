@@ -76,12 +76,19 @@ namespace PW13
                 DefaultExt = "*.txt",                
             };
             
-            if (openfile.ShowDialog() == true) 
-            {                                
-                WorkMas.Open_File(openfile.FileName); //Обращение к функции с параметром (название текстового файла, в котором хранятся данные)
-                VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas._dmas).DefaultView; //Отображение данных, считанных с файла
-                ClearResults();
-                VisualArray.ClearUndoAndCancelUndo();                
+            if (openfile.ShowDialog() == true)
+            {
+                try
+                {
+                    WorkMas.Open_File(openfile.FileName); //Обращение к функции с параметром (название текстового файла, в котором хранятся данные)
+                    VisualTable.ItemsSource = VisualArray.ToDataTable(WorkMas._dmas).DefaultView; //Отображение данных, считанных с файла
+                    ClearResults();
+                    VisualArray.ClearUndoAndCancelUndo();
+                }
+                catch
+                {
+                    MessageBox.Show("Невозможно считать данные", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
         /// <summary>
@@ -103,8 +110,12 @@ namespace PW13
             {                
                 if(e.Source == SaveMenu || e.Source == SaveToolBar) WorkMas._twomas = true;   
                 else WorkMas._twomas = false;
-                WorkMas.Save_File(savefile.FileName); //Обращение к функции с параметром (аналогично предыдущему) 
-                VisualArray.ClearUndoAndCancelUndo();
+                if (WorkMas._dmas != null)
+                {
+                    WorkMas.Save_File(savefile.FileName); //Обращение к функции с параметром (аналогично предыдущему) 
+                    VisualArray.ClearUndoAndCancelUndo();
+                }
+                else MessageBox.Show("Нет данных для сохранения", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         /// <summary>
