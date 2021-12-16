@@ -201,10 +201,11 @@ namespace PW13
                 "2) Заполнение происходит от 0 до указанного вами значения\n" +
                 "3) Для включения кнопок \"Выполнить\" и \"Заполнить\" необходимо создать таблицу.\n" +
                 "4) Пользователю, который НЕ ИМЕЕТ мышки, может воспользоваться горячими клавишами для изменения таблицы. Приведен следующий список:\n" +
-                "- ctrl+s - сохранение исходной таблицы\n" +
-                "- ctrl+o - открытие исходной сохраненной таблицы\n" +
-                "- ctrl+shift+a(d) - добавление(удаление) нового столбца\n" +
-                "- ctrl+a(d) - добавление(удаление) новой строки", "Справка", MessageBoxButton.OK, MessageBoxImage.Information);
+                "- Ctrl+S - сохранение исходной таблицы\n" +
+                "- Ctrl+O - открытие исходной сохраненной таблицы\n" +
+                "- Ctrl+Shift+A(D) - добавление(удаление) нового столбца\n" +
+                "- Ctrl+Alt+A(D) - добавление(удаление) новой строки\n" +
+                "5) Можно попасть в настройки путем нажатия F2", "Справка", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         /// <summary>
         /// Событие окончания изменения значения ячейки 
@@ -257,17 +258,16 @@ namespace PW13
         {
             if (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.O) Open_Click(sender, e);
             if (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.S) Save_Click(sender, e);
-            if (e.KeyboardDevice.Modifiers == ModifierKeys.Alt && e.Key == Key.F4) Exit_Click(sender, e);
             if (e.Key == Key.F1) Support_Click(sender, e);
             if (e.Key == Key.F12) AboutProgram_Click(sender, e);
-            if (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.Z) 
+            if (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.Z)
             {
                 Undo_Click(sender, e);
             }
-            
-            if (((e.KeyboardDevice.Modifiers & (ModifierKeys.Control | ModifierKeys.Shift)) == 
+
+            if (((e.KeyboardDevice.Modifiers & (ModifierKeys.Control | ModifierKeys.Shift)) ==
                 (ModifierKeys.Control | ModifierKeys.Shift) && e.Key == Key.Z) ^
-                (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.Y))            
+                (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.Y))
             {
                 CancelUndo_Click(sender, e);
             }
@@ -276,7 +276,8 @@ namespace PW13
             {
                 AddColumn_Click(sender, e);
             }
-            if (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.A)
+            if ((e.KeyboardDevice.Modifiers & (ModifierKeys.Control | ModifierKeys.Alt)) ==
+                (ModifierKeys.Control | ModifierKeys.Alt) && e.Key == Key.A)
             {
                 AddRow_Click(sender, e);
             }
@@ -285,7 +286,8 @@ namespace PW13
             {
                 DeleteColumn_Click(sender, e);
             }
-            if (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.D)
+            if ((e.KeyboardDevice.Modifiers & (ModifierKeys.Control | ModifierKeys.Alt)) ==
+                (ModifierKeys.Control | ModifierKeys.Alt) && e.Key == Key.D)
             {
                 DeleteRow_Click(sender, e);
             }
@@ -315,7 +317,7 @@ namespace PW13
         }
         private void DeleteColumn_Click(object sender, RoutedEventArgs e)
         {
-            if (VisualTable.CurrentCell.Column.DisplayIndex != -1 || VisualTable.CurrentCell.Column != null)
+            if (VisualTable.CurrentCell.Column != null)
             {
                 ClearResults();
                 VisualTable.ItemsSource = VisualArray.DeleteColumn(ref WorkMas._dmas, VisualTable.CurrentCell.Column.DisplayIndex).DefaultView;
